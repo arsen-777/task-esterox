@@ -16,9 +16,7 @@ export default function SignUp() {
       mailRef.current.value,
       passRef.current.value
     );
-    console.log(auth.user, 'dddddddddddddd');
 
-    console.log(user.user, 'users');
     function writeUserData(userId, name, email) {
       const db = getDatabase();
       set(ref(db, 'users/' + userId), {
