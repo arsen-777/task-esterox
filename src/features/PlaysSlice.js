@@ -53,7 +53,7 @@ const playsSlice = createSlice({
   extraReducers: {
     [fetchPlays.fulfilled]: (state, action) => {
       console.log(action);
-      state.plays.push(action.payload);
+      state.allPlays.push(action.payload);
     },
     [fetchAllPlays.fulfilled]: (state, action) => {
       let obj = action.payload;

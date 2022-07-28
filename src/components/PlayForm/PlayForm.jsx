@@ -7,15 +7,15 @@ import { toggleIsOpen } from '../../features/PlaysSlice';
 import styles from './PlayForm.module.scss';
 
 export default function PlayForm() {
-  const [title, setTitle] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
-  const [fileName, setFileName] = useState('');
-  const [seats, setSeats] = useState();
-
-  const dispatch = useDispatch();
   const { mostBeEdited, allPlays } = useSelector((state) => state.plays);
   const editedCard = allPlays.find((play) => play.id === mostBeEdited);
+  const [title, setTitle] = useState(editedCard?.title || '');
+  const [date, setDate] = useState(editedCard?.date || '');
+  const [time, setTime] = useState(editedCard?.time || '');
+  const [fileName, setFileName] = useState('');
+  const [seats, setSeats] = useState(editedCard?.seats || '');
+
+  const dispatch = useDispatch();
 
   const closeModal = () => {
     dispatch(toggleIsOpen());
@@ -28,7 +28,7 @@ export default function PlayForm() {
     let file;
     let reader = new FileReader();
     reader.readAsDataURL(fileName);
-    reader.onload = function () {
+    reader.onload = function async() {
       file = reader.result;
       let obj = {
         title: title,
@@ -41,12 +41,13 @@ export default function PlayForm() {
         const db = getDatabase();
         const postListRef = ref(db, 'plays');
         const newPostRef = push(postListRef);
-        const test = set(newPostRef, obj);
+        set(newPostRef, obj);
 
         dispatch(fetchPlays({ id: newPostRef.key }));
       } catch (error) {
         console.log('error in catch');
       }
+      closeModal();
     };
   };
 
