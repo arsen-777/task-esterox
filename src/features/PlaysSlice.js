@@ -1,17 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getDatabase, ref, onValue, get, child } from 'firebase/database';
-import { getAuth } from 'firebase/auth';
-
-const db = getDatabase();
-const auth = getAuth();
+import { getDatabase, ref, get, child } from 'firebase/database';
 
 export const fetchPlays = createAsyncThunk(
   'plays/fetchPlays',
   async function ({ id }) {
     const dbRef = ref(getDatabase());
     const snapshot = await get(child(dbRef, `/plays/${id}`));
-    console.log(snapshot.val());
-
     return snapshot.val();
   }
 );
@@ -21,11 +15,37 @@ export const fetchAllPlays = createAsyncThunk(
   async function () {
     const dbRef = ref(getDatabase());
     const snapshot = await get(child(dbRef, `/plays`));
-    console.log(snapshot.val());
+    // console.log(snapshot.val());
 
     return snapshot.val();
   }
 );
+
+// export const fetchUpdatePlay = createAsyncThunk(
+//   'plays/fetchUpdatePlay',
+//   async function (obj, mostBeEdited) {
+//     const db = getDatabase();
+
+//     try {
+//       update(ref(db, `plays/${mostBeEdited}`), obj);
+//     } catch (error) {
+//       console.log('errrrrrrrrrr');
+//     }
+//     // const postData = {
+//     //   title,
+//     //   date,
+//     //   time,
+//     //   image,
+//     //   seats,
+//     // };
+//     // const newPostKey = push(child(ref(db), 'plays')).key;
+//     // const updates = {};
+
+//     // updates['/plays/' + newPostKey] = postData;
+
+//     // console.log(update(ref(db), updates), 'updatesssssssssssssss');
+//   }
+// );
 
 const playsSlice = createSlice({
   name: 'plays',
@@ -40,19 +60,37 @@ const playsSlice = createSlice({
     addPost(state, action) {
       state.plays.push(action.payload);
     },
-    toggleIsOpen(state, action) {
+    toggleIsOpen(state) {
       state.isOpen = !state.isOpen;
     },
-    toggleIsEdited(state, action) {
+    toggleIsEdited(state) {
       state.isEdited = !state.isEdited;
     },
     editMostBeEdited(state, action) {
+      console.log(action.payload.id);
       state.mostBeEdited = action.payload.id;
+    },
+    deleteEditedPlayIe(state, action) {
+      state.mostBeEdited = action.payload;
+    },
+    editPlay(state, action) {
+      console.log(action.payload, '555555555555555555555');
+
+      const { mostBeEdited, obj } = action.payload;
+      const changedPlays = state.allPlays.map((play) => {
+        if (play.id === mostBeEdited) {
+          return (play = { id: mostBeEdited, ...obj });
+        } else {
+          return play;
+        }
+      });
+      state.allPlays = changedPlays;
+      // state.mostBeEdited = mostBeEdited;
     },
   },
   extraReducers: {
     [fetchPlays.fulfilled]: (state, action) => {
-      console.log(action);
+      // console.log(action);
       state.allPlays.push(action.payload);
     },
     [fetchAllPlays.fulfilled]: (state, action) => {
@@ -61,12 +99,17 @@ const playsSlice = createSlice({
       for (const id in obj) {
         newPlays.push({ id, ...obj[id] });
       }
-      console.log(newPlays, 'all action plays');
       state.allPlays = newPlays;
     },
   },
 });
 
-export const { addPost, toggleIsOpen, editMostBeEdited } = playsSlice.actions;
+export const {
+  addPost,
+  toggleIsOpen,
+  editMostBeEdited,
+  editPlay,
+  deleteEditedPlayIe,
+} = playsSlice.actions;
 
 export default playsSlice.reducer;

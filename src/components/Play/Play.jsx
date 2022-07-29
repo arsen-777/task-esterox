@@ -5,16 +5,13 @@ import { toggleIsOpen, editMostBeEdited } from '../../features/PlaysSlice';
 
 export default function Play({ id, title, image, date, time, seats }) {
   const dispatch = useDispatch();
-  // const editModal = () => {
-  //   dispatch(toggleIsOpen());
-  // };
+
   const handleModal = () => {
+    console.log('handleModal', id);
     dispatch(toggleIsOpen());
     dispatch(editMostBeEdited({ id }));
   };
-  // const editPlayById = (id) => {
 
-  // };
   return (
     <div>
       <div className={styles.titleBlock}>

@@ -1,29 +1,76 @@
 import React, { useRef, useState } from 'react';
-import uuid from 'react-uuid';
-import { getDatabase, ref, set, push } from 'firebase/database';
+import { getDatabase, ref, update, set, push } from 'firebase/database';
 import { fetchPlays } from '../../features/PlaysSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleIsOpen } from '../../features/PlaysSlice';
+import {
+  toggleIsOpen,
+  editPlay,
+  deleteEditedPlayIe,
+} from '../../features/PlaysSlice';
 import styles from './PlayForm.module.scss';
+import uuid from 'react-uuid';
+import Cropper from 'react-cropper';
+import 'cropperjs/dist/cropper.css';
 
 export default function PlayForm() {
+  const cropperRef = useRef(null);
+  const onCrop = () => {
+    const imageElement = cropperRef?.current;
+    const cropper = imageElement?.cropper;
+    console.log(cropper.getCroppedCanvas().toDataURL(), 'croppppppppperrrrrr');
+  };
   const { mostBeEdited, allPlays } = useSelector((state) => state.plays);
   const editedCard = allPlays.find((play) => play.id === mostBeEdited);
   const [title, setTitle] = useState(editedCard?.title || '');
   const [date, setDate] = useState(editedCard?.date || '');
   const [time, setTime] = useState(editedCard?.time || '');
-  const [fileName, setFileName] = useState('');
+  const [fileName, setFileName] = useState(editedCard?.image);
   const [seats, setSeats] = useState(editedCard?.seats || '');
+  const [isCrop, setIsCrop] = useState(false);
+  // const [photoUrl, setPhotoUrl] = useState('');
+  const db = getDatabase();
 
   const dispatch = useDispatch();
-
   const closeModal = () => {
     dispatch(toggleIsOpen());
   };
+  function handleOptionChange(e) {
+    setSeats(e.target.value);
+  }
+  function handleTime(e) {
+    setTime(e.target.value);
+  }
 
   const submitHandler = (e) => {
     e.preventDefault();
-
+    // change file type to blob
+    let file;
+    let reader = new FileReader();
+    reader.readAsDataURL(fileName);
+    reader.onload = function async() {
+      file = reader.result;
+      let obj = {
+        key: uuid(),
+        title: title,
+        date: date,
+        time: time,
+        image: file,
+        seats: seats,
+      };
+      try {
+        const db = getDatabase();
+        const postListRef = ref(db, 'plays');
+        const newPostRef = push(postListRef);
+        set(newPostRef, obj);
+        dispatch(fetchPlays({ id: newPostRef.key, ...obj }));
+      } catch (error) {
+        console.log('error in catch');
+      }
+      closeModal();
+    };
+  };
+  const updateOnePlays = (e) => {
+    e.preventDefault();
     // change file type to blob
     let file;
     let reader = new FileReader();
@@ -36,27 +83,20 @@ export default function PlayForm() {
         time: time,
         image: file,
         seats: seats,
+        uid: mostBeEdited,
       };
-      try {
-        const db = getDatabase();
-        const postListRef = ref(db, 'plays');
-        const newPostRef = push(postListRef);
-        set(newPostRef, obj);
 
-        dispatch(fetchPlays({ id: newPostRef.key }));
+      try {
+        dispatch(deleteEditedPlayIe(null));
+        console.log('entered try----');
+        update(ref(db, `plays/${mostBeEdited}`), obj);
+        dispatch(editPlay({ obj, mostBeEdited }));
       } catch (error) {
-        console.log('error in catch');
+        console.log('error in catch', error);
       }
       closeModal();
     };
   };
-
-  function handleOptionChange(e) {
-    setSeats(e.target.value);
-  }
-  function handleTime(e) {
-    setTime(e.target.value);
-  }
 
   return (
     <div className={styles.modal}>
@@ -101,14 +141,34 @@ export default function PlayForm() {
           <div>
             <label htmlFor="file"></label>
             <input
-              onChange={(e) => setFileName(e.target.files[0])}
+              onChange={(e) => {
+                setFileName(e.target.files[0]);
+                // setPhotoUrl(URL.createObjectURL(e.target.files[0]));
+                // setIsCrop(!isCrop);
+              }}
               type="file"
               name="file"
             />
+            {/* {isCrop && (
+              <Cropper
+                src={photoUrl}
+                style={{ height: 200, width: '100%' }}
+                initialAspectRatio={16 / 9}
+                guides={false}
+                crop={onCrop}
+                ref={cropperRef}
+              />
+            )} */}
+            <div>
+              <img src={fileName} alt="" />
+            </div>
           </div>
           <div>
             <button onClick={closeModal}>Cancel</button>
             <button type="submit">Save</button>
+            <button onClick={updateOnePlays} type="submit">
+              Update
+            </button>
           </div>
         </form>
       </div>
