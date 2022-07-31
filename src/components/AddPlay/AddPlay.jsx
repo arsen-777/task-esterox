@@ -9,10 +9,8 @@ export default function AddPlay() {
     dispatch(toggleIsOpen());
   };
   return (
-    <div className={styles.addPlay}>
-      <div onClick={toggleModal}>
-        <img src={add} alt="" />
-      </div>
+    <div className={styles.addPlay} onClick={toggleModal}>
+      <img src={add} alt="" />
     </div>
   );
 }
