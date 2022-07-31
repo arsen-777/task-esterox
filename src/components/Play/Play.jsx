@@ -16,26 +16,28 @@ export default function Play({ id, title, image, date, time, seats }) {
   };
 
   return (
-    <div>
+    <div className={styles.playBlock}>
       <div className={styles.titleBlock}>
         <div>
-          <h2>{title}</h2>
+          <h4>{title}</h4>
         </div>
         <div className={styles.editBlock} onClick={() => handleModal(id)}>
           <img src={edit} alt="" />
         </div>
       </div>
-      <div>
+      <div className={styles.img}>
         <img src={image} alt="" />
       </div>
-      <div>
-        <p>{date}</p>
+      <div className={styles.dateTime}>
+        <div>
+          <p>{date}</p>
+        </div>
+        <div>
+          <p>{time}</p>
+        </div>
       </div>
       <div>
-        <p>{time}</p>
-      </div>
-      <div>
-        <p>available tickets{seats}</p>
+        <p>available tickets - {seats}</p>
       </div>
     </div>
   );
