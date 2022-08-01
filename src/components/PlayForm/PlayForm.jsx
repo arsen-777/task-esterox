@@ -131,6 +131,7 @@ export default function PlayForm() {
             />
           </div>
           <div>
+            gi
             <label htmlFor="seats"></label>
             <input
               type="number"
