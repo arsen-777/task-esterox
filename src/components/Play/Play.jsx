@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Play.module.scss';
 import edit from '../../asets/images/edit1.svg';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,11 +9,15 @@ export default function Play({ id, title, image, date, time, seats }) {
   const { isUser } = useSelector((state) => state.users);
 
   const [bookCount, setBookCount] = useState(0);
+  const [isBooked, setIsBooked] = useState(false);
   const [message, setMessage] = useState('');
   const handleModal = () => {
     dispatch(toggleIsOpen());
     dispatch(editMostBeEdited({ id }));
   };
+  useEffect(() => {
+    console.log(isBooked, 'issssssboked');
+  }, [isBooked]);
 
   const updateSeat = () => {
     const obj = {
@@ -25,6 +29,7 @@ export default function Play({ id, title, image, date, time, seats }) {
       seats: seats - bookCount,
     };
     dispatch(fetchUpdateSeat(obj));
+    setIsBooked(!isBooked);
   };
 
   const handleBook = (e) => {
@@ -64,15 +69,19 @@ export default function Play({ id, title, image, date, time, seats }) {
             <p>available tickets - {seats}</p>
           )}
         </div>
-        <div className={styles.book}>
-          {isUser && <button onClick={updateSeat}>Book</button>}
-          <input
-            type="number"
-            onChange={(e) => handleBook(e)}
-            value={bookCount}
-          />
-          <span className={styles.span}>{message}</span>
-        </div>
+        {!isBooked ? (
+          <div className={styles.book}>
+            {isUser && <button onClick={updateSeat}>Book</button>}
+            <input
+              type="number"
+              onChange={(e) => handleBook(e)}
+              value={bookCount}
+            />
+            <span className={styles.span}>{message}</span>
+          </div>
+        ) : (
+          <p>Booked</p>
+        )}
       </div>
     </>
   );

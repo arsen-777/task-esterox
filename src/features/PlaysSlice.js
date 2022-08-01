@@ -60,6 +60,7 @@ const playsSlice = createSlice({
     isOpen: false,
     isEdited: false,
     mostBeEdited: null,
+    isBooked: false,
   },
   reducers: {
     addPost(state, action) {
@@ -77,6 +78,9 @@ const playsSlice = createSlice({
     },
     deleteEditedPlayIe(state, action) {
       state.mostBeEdited = action.payload;
+    },
+    toggleIsBooked(state) {
+      state.isBooked = true;
     },
     editPlay(state, action) {
       console.log(action.payload, '555555555555555555555');
@@ -118,6 +122,7 @@ export const {
   editMostBeEdited,
   editPlay,
   deleteEditedPlayIe,
+  toggleIsBooked,
 } = playsSlice.actions;
 
 export default playsSlice.reducer;
