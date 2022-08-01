@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getDatabase, ref, get, child } from 'firebase/database';
+import { getDatabase, ref, get, child, update, push } from 'firebase/database';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const fetchPlays = createAsyncThunk(
   'plays/fetchPlays',
@@ -15,37 +16,41 @@ export const fetchAllPlays = createAsyncThunk(
   async function () {
     const dbRef = ref(getDatabase());
     const snapshot = await get(child(dbRef, `/plays`));
-    // console.log(snapshot.val());
 
     return snapshot.val();
   }
 );
 
-// export const fetchUpdatePlay = createAsyncThunk(
-//   'plays/fetchUpdatePlay',
-//   async function (obj, mostBeEdited) {
-//     const db = getDatabase();
+export const fetchUpdateSeat = createAsyncThunk(
+  'plays/fetchUpdateSeat',
+  async function (obj, { dispatch }) {
+    // console.log(obj, 'stexinyyyyyyyyyyy');
+    const db = getDatabase();
+    // const postData = {
+    //   uid: id,
+    //   title: title,
+    //   date: date,
+    //   time: time,
+    //   seats: bookCount,
+    // };
+    // console.log(postData, 'postdtaaaaaaa');
+    // const newPostKey = push(child(ref(db), 'plays')).key;
+    // const updates = {};
+    // updates['/posts/' + newPostKey] = postData;
+    // updates['/user-posts/' + id + '/' + newPostKey] = postData;
+    // console.log(update(ref(db), updates), 'update(ref(db), updates)');
+    // return update(ref(db), updates);
+    try {
+      // console.log(obj.id, 'idddddddddddddddddddddddddddddddddddddd');
+      console.log('entered try----');
+      const updatedSeat = update(ref(db, `plays/${obj.uid}`), obj);
 
-//     try {
-//       update(ref(db, `plays/${mostBeEdited}`), obj);
-//     } catch (error) {
-//       console.log('errrrrrrrrrr');
-//     }
-//     // const postData = {
-//     //   title,
-//     //   date,
-//     //   time,
-//     //   image,
-//     //   seats,
-//     // };
-//     // const newPostKey = push(child(ref(db), 'plays')).key;
-//     // const updates = {};
-
-//     // updates['/plays/' + newPostKey] = postData;
-
-//     // console.log(update(ref(db), updates), 'updatesssssssssssssss');
-//   }
-// );
+      dispatch(editPlay({ obj, mostBeEdited: obj.uid }));
+    } catch (error) {
+      console.log('error in catch', error);
+    }
+  }
+);
 
 const playsSlice = createSlice({
   name: 'plays',
@@ -100,6 +105,9 @@ const playsSlice = createSlice({
         newPlays.push({ id, ...obj[id] });
       }
       state.allPlays = newPlays;
+    },
+    [fetchUpdateSeat.fulfilled]: (state, action) => {
+      console.log(action.payload, 'updati action payloadnaaaaaaa');
     },
   },
 });

@@ -1,16 +1,16 @@
 import React, { useRef, useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { getDatabase, ref, set } from 'firebase/database';
 import { Link, useNavigate } from 'react-router-dom';
-import { Navigate } from 'react-router';
-
+import { fetchAllUsers } from '../../features/usersSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleIsUser } from '../../features/usersSlice';
 const auth = getAuth();
 export default function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const mailRef = useRef(null);
   const passRef = useRef(null);
   const handlerOnSubmit = async (e) => {
-    console.log('login page');
     e.preventDefault();
 
     signInWithEmailAndPassword(
@@ -20,10 +20,11 @@ export default function Login() {
     )
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log(user, 'then user');
 
         if (user) {
-          return <Navigate replace to="/" />;
+          dispatch(fetchAllUsers());
+          dispatch(toggleIsUser());
+          return navigate('/userplay');
         }
       })
       .catch((error) => {
