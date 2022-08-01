@@ -11,8 +11,13 @@ import styles from './PlayForm.module.scss';
 import uuid from 'react-uuid';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
+import upload from '../../asets/images/upload.svg';
 
 export default function PlayForm() {
+  const filePicker = useRef(null);
+  const handlePick = () => {
+    filePicker.current.click();
+  };
   const cropperRef = useRef(null);
   const onCrop = () => {
     const imageElement = cropperRef?.current;
@@ -140,16 +145,28 @@ export default function PlayForm() {
             />
           </div>
           <div>
-            <label htmlFor="file"></label>
-            <input
-              onChange={(e) => {
-                setFileName(e.target.files[0]);
-                // setPhotoUrl(URL.createObjectURL(e.target.files[0]));
-                // setIsCrop(!isCrop);
-              }}
-              type="file"
-              name="file"
-            />
+            <div className={styles.uploadBlock}>
+              <div>
+                <input
+                  ref={filePicker}
+                  className={styles.hidden}
+                  onChange={(e) => {
+                    setFileName(e.target.files[0]);
+
+                    // setPhotoUrl(URL.createObjectURL(e.target.files[0]));
+                    // setIsCrop(!isCrop);
+                  }}
+                  type="file"
+                  name="file"
+                  accept="image/*"
+                />
+              </div>
+              <div onClick={handlePick} className={styles.uploadImg}>
+                <img src={upload} alt="" />
+                <p>Upload image</p>
+              </div>
+            </div>
+
             {/* {isCrop && (
               <Cropper
                 src={photoUrl}
