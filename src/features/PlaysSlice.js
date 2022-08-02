@@ -42,7 +42,6 @@ export const fetchUpdateSeat = createAsyncThunk(
     // return update(ref(db), updates);
     try {
       // console.log(obj.id, 'idddddddddddddddddddddddddddddddddddddd');
-      console.log('entered try----');
       const updatedSeat = update(ref(db, `plays/${obj.uid}`), obj);
 
       dispatch(editPlay({ obj, mostBeEdited: obj.uid }));
@@ -73,7 +72,6 @@ const playsSlice = createSlice({
       state.isEdited = !state.isEdited;
     },
     editMostBeEdited(state, action) {
-      console.log(action.payload.id);
       state.mostBeEdited = action.payload.id;
     },
     deleteEditedPlayIe(state, action) {
@@ -83,8 +81,6 @@ const playsSlice = createSlice({
       state.isBooked = true;
     },
     editPlay(state, action) {
-      console.log(action.payload, '555555555555555555555');
-
       const { mostBeEdited, obj } = action.payload;
       const changedPlays = state.allPlays.map((play) => {
         if (play.id === mostBeEdited) {

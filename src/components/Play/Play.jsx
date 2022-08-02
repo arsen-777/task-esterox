@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styles from './Play.module.scss';
 import edit from '../../asets/images/edit1.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleIsOpen, editMostBeEdited } from '../../features/PlaysSlice';
+import { getDatabase, ref, set, push } from 'firebase/database';
 import { fetchUpdateSeat } from '../../features/PlaysSlice';
+import { fetchBookings } from '../../features/BookingsSlice';
 export default function Play({ id, title, image, date, time, seats }) {
   const dispatch = useDispatch();
   const { isUser } = useSelector((state) => state.users);
+  const { users } = useSelector((state) => state.users);
 
   const [bookCount, setBookCount] = useState(0);
   const [isBooked, setIsBooked] = useState(false);
@@ -15,9 +18,6 @@ export default function Play({ id, title, image, date, time, seats }) {
     dispatch(toggleIsOpen());
     dispatch(editMostBeEdited({ id }));
   };
-  useEffect(() => {
-    console.log(isBooked, 'issssssboked');
-  }, [isBooked]);
 
   const updateSeat = () => {
     const obj = {
@@ -28,8 +28,27 @@ export default function Play({ id, title, image, date, time, seats }) {
       image: image,
       seats: seats - bookCount,
     };
+    const bookedObject = {
+      playName: title,
+      playDate: date,
+      status: 'pending',
+      ticketsCount: bookCount,
+      bookedDate: new Date().toLocaleString(),
+      ...users[0],
+    };
+    try {
+      const db = getDatabase();
+      const postListRef = ref(db, 'bookings');
+      const newPostRef = push(postListRef);
+      set(newPostRef, bookedObject);
+      dispatch(fetchBookings());
+    } catch (error) {
+      console.log('error in catch');
+    }
     dispatch(fetchUpdateSeat(obj));
-    setIsBooked(!isBooked);
+    dispatch(fetchBookings(bookedObject));
+
+    setIsBooked(true);
   };
 
   const handleBook = (e) => {

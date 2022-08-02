@@ -1,0 +1,36 @@
+.book {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-bottom: 3px solid rgb(95, 89, 89);
+  border-right: 3px solid rgb(95, 89, 89);
+}
+.size {
+  width: 10%;
+  border-right: 3px solid rgb(95, 89, 89);
+  &:last-child {
+    display: flex;
+    justify-content: space-around;
+    border: none;
+  }
+}
+
+.btnApprove {
+  background-color: blue;
+  color: white;
+  padding: 6px 16px;
+  border: none;
+  border-radius: 4px;
+}
+.btnReject {
+  background-color: red;
+  color: white;
+  padding: 6px 16px;
+  border: none;
+  border-radius: 4px;
+}
+
+.approved {
+  color: rgb(22, 87, 22);
+  font-size: 18px;
+}

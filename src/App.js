@@ -7,6 +7,8 @@ import AdminPlays from './pages/AdminPlays/AdminPlays';
 import PlayForm from './components/PlayForm/PlayForm';
 import { useSelector } from 'react-redux';
 import UserPlay from './pages/UserPlay/UserPlay';
+import UserBookings from './pages/UserBookings/UserBookings';
+import AdminBookings from './pages/AdminBookings/AdminBookings';
 function App() {
   const { isOpen } = useSelector((state) => state.plays);
   return (
@@ -17,7 +19,9 @@ function App() {
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/adminplays" element={<AdminPlays />} />
-          <Route path="/userplay" element={<UserPlay />}></Route>
+          <Route path="/userplay" element={<UserPlay />} />
+          <Route path="userplay/userbookings" element={<UserBookings />} />
+          <Route path="userplay/adminbookings" element={<AdminBookings />} />
         </Routes>
       </BrowserRouter>
       {isOpen && <PlayForm />}
