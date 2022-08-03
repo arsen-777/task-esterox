@@ -3,17 +3,29 @@ import styles from './UserBookings.module.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchBookings } from '../../features/BookingsSlice';
 import UserBooking from '../../components/UserBooking/UserBooking';
-
+import { Link } from 'react-router-dom';
 export default function UserBookings() {
   const { bookingsUser } = useSelector((state) => state.bookings);
-  console.log(bookingsUser, 'bookingsUser -------------');
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchBookings());
   }, [dispatch]);
   return (
-    <div>
+    <div className={styles.container}>
+      <div className={styles.navMenu}>
+        <div className={styles.nav}>
+          <Link className={styles.link} to={'userplays'}>
+            Plays
+          </Link>
+          <Link className={styles.link} to={'userbookings'}>
+            Bookings
+          </Link>
+        </div>
+        <div>
+          <div>Admin</div>
+        </div>
+      </div>
       <div className={styles.bookingContainer}>
         <div className={styles.size}>
           <h3>Play name</h3>
@@ -34,7 +46,7 @@ export default function UserBookings() {
       </div>
       {bookingsUser?.length &&
         bookingsUser.map((book) => {
-          return <UserBooking {...book} />;
+          return <UserBooking key={book.bookingId} {...book} />;
         })}
     </div>
   );

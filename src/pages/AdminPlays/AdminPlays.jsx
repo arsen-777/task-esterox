@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styles from './AdminPlays.module.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import Play from '../../components/Play/Play';
@@ -15,7 +15,7 @@ export default function AdminPlays() {
   return (
     <div className={styles.playsBlock}>
       <div className={styles.playsContainer}>
-        {allPlays?.length &&
+        {allPlays?.length > 0 &&
           allPlays.map((play) => {
             return <Play key={play.key} {...play} />;
           })}

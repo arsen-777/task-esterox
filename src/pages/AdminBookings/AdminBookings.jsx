@@ -10,7 +10,6 @@ export default function AdminBookings() {
     dispatch(fetchBookings());
   }, [dispatch]);
   const { bookingsAdmin } = useSelector((state) => state.bookings);
-  // console.log(bookingsAdmin, 'bookingsAdminbookingsAdminbookingsAdmin');
   return (
     <div>
       <div className={styles.bookingContainer}>
@@ -35,7 +34,7 @@ export default function AdminBookings() {
       </div>
       {bookingsAdmin?.length &&
         bookingsAdmin.map((book) => {
-          return <Booking {...book} />;
+          return <Booking key={book.bookingId} {...book} />;
         })}
     </div>
   );

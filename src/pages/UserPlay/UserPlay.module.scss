@@ -2,3 +2,36 @@
   display: flex;
   justify-content: space-evenly;
 }
+.container {
+  padding: 0 20px;
+  height: 45px;
+  border-bottom: 4px solid rgb(63, 58, 58);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  & p {
+    font-size: 18px;
+    font-style: italic;
+  }
+}
+.navMenu {
+  width: 10%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav {
+  width: 10%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.link {
+  text-decoration: none;
+  font-size: 18px;
+  color: black;
+  &:hover {
+    color: rgb(19, 122, 156);
+  }
+}

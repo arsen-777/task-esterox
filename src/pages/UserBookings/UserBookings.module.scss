@@ -9,3 +9,28 @@
 .size {
   width: 25%;
 }
+
+.container {
+  padding: 0 20px;
+}
+.navMenu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 45px;
+  border-bottom: 4px solid rgb(63, 58, 58);
+}
+.nav {
+  width: 10%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.link {
+  text-decoration: none;
+  font-size: 18px;
+  color: black;
+  &:hover {
+    color: rgb(19, 122, 156);
+  }
+}

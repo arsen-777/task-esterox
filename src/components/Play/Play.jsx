@@ -1,19 +1,31 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styles from './Play.module.scss';
 import edit from '../../asets/images/edit1.svg';
+import del from '../../asets/images/delete.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleIsOpen, editMostBeEdited } from '../../features/PlaysSlice';
+import {
+  toggleIsOpen,
+  editMostBeEdited,
+  fetchDeletePlay,
+} from '../../features/PlaysSlice';
 import { getDatabase, ref, set, push } from 'firebase/database';
 import { fetchUpdateSeat } from '../../features/PlaysSlice';
 import { fetchBookings } from '../../features/BookingsSlice';
+import { dateToUTC } from '../../helpers/formaterDate';
+import useAuth from '../hooks/useAuth';
 export default function Play({ id, title, image, date, time, seats }) {
   const dispatch = useDispatch();
   const { isUser } = useSelector((state) => state.users);
   const { users } = useSelector((state) => state.users);
-
+  const user = useAuth();
+  const { bookingsUser } = useSelector((state) => state.bookings);
+  console.log(user?.uid, 'user');
+  console.log(bookingsUser, 'bookingsUser');
   const [bookCount, setBookCount] = useState(0);
-  const [isBooked, setIsBooked] = useState(false);
   const [message, setMessage] = useState('');
+  console.log(id, 'iddddddddddddddddddddd');
+  let isBooked = bookingsUser.find((item) => item.playId === id);
+  console.log(isBooked, 'isBooked');
   const handleModal = () => {
     dispatch(toggleIsOpen());
     dispatch(editMostBeEdited({ id }));
@@ -21,7 +33,7 @@ export default function Play({ id, title, image, date, time, seats }) {
 
   const updateSeat = () => {
     const obj = {
-      uid: id,
+      id: id,
       title: title,
       date: date,
       time: time,
@@ -29,11 +41,12 @@ export default function Play({ id, title, image, date, time, seats }) {
       seats: seats - bookCount,
     };
     const bookedObject = {
+      playId: id,
       playName: title,
       playDate: date,
       status: 'pending',
       ticketsCount: bookCount,
-      bookedDate: new Date().toLocaleString(),
+      bookedDate: dateToUTC(new Date()),
       ...users[0],
     };
     try {
@@ -41,16 +54,15 @@ export default function Play({ id, title, image, date, time, seats }) {
       const postListRef = ref(db, 'bookings');
       const newPostRef = push(postListRef);
       set(newPostRef, bookedObject);
-      dispatch(fetchBookings());
+      // dispatch(fetchBookings());
     } catch (error) {
       console.log('error in catch');
     }
     dispatch(fetchUpdateSeat(obj));
     dispatch(fetchBookings(bookedObject));
-
-    setIsBooked(true);
+    console.log(1111);
+    // setIsBooked(true);
   };
-
   const handleBook = (e) => {
     if (+seats) {
       setBookCount(e.target.value);
@@ -58,7 +70,10 @@ export default function Play({ id, title, image, date, time, seats }) {
       setMessage('No tickets');
     }
   };
-
+  const deletePlay = (id) => {
+    dispatch(fetchDeletePlay(id));
+  };
+  console.log(isBooked);
   return (
     <>
       <div className={styles.playBlock}>
@@ -66,8 +81,13 @@ export default function Play({ id, title, image, date, time, seats }) {
           <div>
             <h4>{title}</h4>
           </div>
-          <div className={styles.editBlock} onClick={() => handleModal(id)}>
-            <img src={edit} alt="" />
+          <div className={styles.delEdit}>
+            <div onClick={() => handleModal(id)} className={styles.editBlock}>
+              <img src={edit} alt="" />
+            </div>
+            <div onClick={() => deletePlay(id)} className={styles.delete}>
+              <img src={del} alt="" />
+            </div>
           </div>
         </div>
         <div className={styles.img}>
@@ -99,7 +119,7 @@ export default function Play({ id, title, image, date, time, seats }) {
             <span className={styles.span}>{message}</span>
           </div>
         ) : (
-          <p>Booked</p>
+          <p className={styles.booked}>Booked</p>
         )}
       </div>
     </>

@@ -1,6 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getDatabase, ref, get, child, update, push } from 'firebase/database';
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  getDatabase,
+  ref,
+  get,
+  child,
+  update,
+  push,
+  remove,
+} from 'firebase/database';
 
 export const fetchPlays = createAsyncThunk(
   'plays/fetchPlays',
@@ -24,30 +31,24 @@ export const fetchAllPlays = createAsyncThunk(
 export const fetchUpdateSeat = createAsyncThunk(
   'plays/fetchUpdateSeat',
   async function (obj, { dispatch }) {
-    // console.log(obj, 'stexinyyyyyyyyyyy');
     const db = getDatabase();
-    // const postData = {
-    //   uid: id,
-    //   title: title,
-    //   date: date,
-    //   time: time,
-    //   seats: bookCount,
-    // };
-    // console.log(postData, 'postdtaaaaaaa');
-    // const newPostKey = push(child(ref(db), 'plays')).key;
-    // const updates = {};
-    // updates['/posts/' + newPostKey] = postData;
-    // updates['/user-posts/' + id + '/' + newPostKey] = postData;
-    // console.log(update(ref(db), updates), 'update(ref(db), updates)');
-    // return update(ref(db), updates);
+    console.log(obj, 'iddddddddddddddddddddd');
     try {
-      // console.log(obj.id, 'idddddddddddddddddddddddddddddddddddddd');
-      const updatedSeat = update(ref(db, `plays/${obj.uid}`), obj);
+      update(ref(db, `plays/${obj.id}`), obj);
 
-      dispatch(editPlay({ obj, mostBeEdited: obj.uid }));
+      dispatch(editPlay({ obj, mostBeEdited: obj.id }));
     } catch (error) {
       console.log('error in catch', error);
     }
+  }
+);
+
+export const fetchDeletePlay = createAsyncThunk(
+  'plays/fetchDeletePlay',
+  async function (uid, { dispatch }) {
+    const db = getDatabase();
+    remove(ref(db, `plays/${uid}`));
+    dispatch(deletePlay({ id: uid }));
   }
 );
 
@@ -82,6 +83,7 @@ const playsSlice = createSlice({
     },
     editPlay(state, action) {
       const { mostBeEdited, obj } = action.payload;
+      console.log(mostBeEdited, 'edit playi id');
       const changedPlays = state.allPlays.map((play) => {
         if (play.id === mostBeEdited) {
           return (play = { id: mostBeEdited, ...obj });
@@ -90,12 +92,17 @@ const playsSlice = createSlice({
         }
       });
       state.allPlays = changedPlays;
-      // state.mostBeEdited = mostBeEdited;
+    },
+    deletePlay(state, action) {
+      console.log(action.payload.id, 'delete action');
+      console.log(state.allPlays, 'allllllll');
+      state.allPlays = state.allPlays.filter(
+        (play) => play.id !== action.payload.id
+      );
     },
   },
   extraReducers: {
     [fetchPlays.fulfilled]: (state, action) => {
-      // console.log(action);
       state.allPlays.push(action.payload);
     },
     [fetchAllPlays.fulfilled]: (state, action) => {
@@ -106,9 +113,7 @@ const playsSlice = createSlice({
       }
       state.allPlays = newPlays;
     },
-    [fetchUpdateSeat.fulfilled]: (state, action) => {
-      console.log(action.payload, 'updati action payloadnaaaaaaa');
-    },
+    [fetchUpdateSeat.fulfilled]: (state, action) => {},
   },
 });
 
@@ -119,6 +124,7 @@ export const {
   editPlay,
   deleteEditedPlayIe,
   toggleIsBooked,
+  deletePlay,
 } = playsSlice.actions;
 
 export default playsSlice.reducer;

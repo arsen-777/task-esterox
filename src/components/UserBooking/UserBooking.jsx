@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './UserBooking.module.scss';
 export default function UserBooking({
   playName,
@@ -7,8 +7,6 @@ export default function UserBooking({
   playDate,
   status,
 }) {
-  const [isApproved, setIsApproved] = useState(false);
-
   return (
     <div className={styles.book}>
       <div className={styles.size}>
