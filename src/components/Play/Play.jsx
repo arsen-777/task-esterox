@@ -13,24 +13,25 @@ import { fetchUpdateSeat } from '../../features/PlaysSlice';
 import { fetchBookings } from '../../features/BookingsSlice';
 import { dateToUTC } from '../../helpers/formaterDate';
 import useAuth from '../hooks/useAuth';
+import { toggleIsUser } from '../../features/usersSlice';
 export default function Play({ id, title, image, date, time, seats }) {
   const dispatch = useDispatch();
   const { isUser } = useSelector((state) => state.users);
   const { users } = useSelector((state) => state.users);
   const user = useAuth();
   const { bookingsUser } = useSelector((state) => state.bookings);
-  console.log(user?.uid, 'user');
-  console.log(bookingsUser, 'bookingsUser');
+  // console.log(user?.uid, 'user');
   const [bookCount, setBookCount] = useState(0);
   const [message, setMessage] = useState('');
-  console.log(id, 'iddddddddddddddddddddd');
   let isBooked = bookingsUser.find((item) => item.playId === id);
-  console.log(isBooked, 'isBooked');
   const handleModal = () => {
     dispatch(toggleIsOpen());
     dispatch(editMostBeEdited({ id }));
   };
 
+  useEffect(() => {
+    dispatch(toggleIsUser());
+  }, [dispatch]);
   const updateSeat = () => {
     const obj = {
       id: id,
@@ -54,14 +55,11 @@ export default function Play({ id, title, image, date, time, seats }) {
       const postListRef = ref(db, 'bookings');
       const newPostRef = push(postListRef);
       set(newPostRef, bookedObject);
-      // dispatch(fetchBookings());
     } catch (error) {
       console.log('error in catch');
     }
     dispatch(fetchUpdateSeat(obj));
     dispatch(fetchBookings(bookedObject));
-    console.log(1111);
-    // setIsBooked(true);
   };
   const handleBook = (e) => {
     if (+seats) {
@@ -73,7 +71,7 @@ export default function Play({ id, title, image, date, time, seats }) {
   const deletePlay = (id) => {
     dispatch(fetchDeletePlay(id));
   };
-  console.log(isBooked);
+  console.log(isUser, 'isUser--------');
   return (
     <>
       <div className={styles.playBlock}>
@@ -110,12 +108,17 @@ export default function Play({ id, title, image, date, time, seats }) {
         </div>
         {!isBooked ? (
           <div className={styles.book}>
-            {isUser && <button onClick={updateSeat}>Book</button>}
-            <input
-              type="number"
-              onChange={(e) => handleBook(e)}
-              value={bookCount}
-            />
+            {isUser && (
+              <div>
+                <button onClick={updateSeat}>Book</button>
+
+                <input
+                  type="number"
+                  onChange={(e) => handleBook(e)}
+                  value={bookCount}
+                />
+              </div>
+            )}
             <span className={styles.span}>{message}</span>
           </div>
         ) : (

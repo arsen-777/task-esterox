@@ -1,9 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchAllUsers } from '../../features/usersSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toggleIsUser } from '../../features/usersSlice';
+import styles from './Login.module.scss';
 const auth = getAuth();
 export default function Login() {
   const dispatch = useDispatch();
@@ -33,10 +34,10 @@ export default function Login() {
       });
   };
   return (
-    <div>
+    <div className={styles.loginContainer}>
       <form onSubmit={handlerOnSubmit}>
-        Login
-        <div>
+        <h2>Login</h2>
+        <div className={styles.formBlock}>
           <div>
             <label htmlFor="mail">Email</label>
             <input ref={mailRef} type="email" name="name" />
@@ -46,8 +47,13 @@ export default function Login() {
             <input ref={passRef} type="password" name="pass" />
           </div>
         </div>
-        <button type="submit">Log In</button>
-        <Link to="/signUp">Sign Up</Link>
+
+        <div className={styles.signUpLogin}>
+          <button type="submit">Log In</button>
+          <Link to="/signUp">
+            <button>Sign Up</button>
+          </Link>
+        </div>
       </form>
     </div>
   );

@@ -4,11 +4,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import Play from '../../components/Play/Play';
 import { fetchAllPlays } from '../../features/PlaysSlice';
 import AddPlay from '../../components/AddPlay/AddPlay';
-
+import { toggleIsUser } from '../../features/usersSlice';
 export default function AdminPlays() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchAllPlays());
+    dispatch(toggleIsUser());
   }, [dispatch]);
 
   const { allPlays } = useSelector((state) => state.plays);

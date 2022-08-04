@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { getDatabase, ref, set } from 'firebase/database';
 import { Link } from 'react-router-dom';
+import styles from './SignUp.module.scss';
 const auth = getAuth();
 export default function SignUp() {
   const nameRef = useRef(null);
@@ -28,10 +29,10 @@ export default function SignUp() {
     writeUserData(user.user.uid, nameRef.current.value, user.user.email);
   };
   return (
-    <div>
+    <div className={styles.signUpContainer}>
       <form onSubmit={handlerOnSubmit}>
-        Registration
-        <div>
+        <h2> Registration</h2>
+        <div className={styles.formBlock}>
           <div>
             <label htmlFor="name">Name</label>
             <input ref={nameRef} type="text" name="mail" />
@@ -45,8 +46,12 @@ export default function SignUp() {
             <input ref={passRef} type="password" name="pass" />
           </div>
         </div>
-        <button type="submit">Register</button>
-        <Link to="/login">Log In</Link>
+        <div className={styles.signUpLogin}>
+          <button type="submit">Register</button>
+          <Link className={styles.link} to="/login">
+            <button> LOGIN</button>
+          </Link>
+        </div>
       </form>
     </div>
   );

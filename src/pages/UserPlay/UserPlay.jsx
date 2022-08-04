@@ -4,6 +4,7 @@ import Play from '../../components/Play/Play';
 import { fetchAllPlays } from '../../features/PlaysSlice';
 import styles from './UserPlay.module.scss';
 import { Link } from 'react-router-dom';
+import { toggleIsUser } from '../../features/usersSlice';
 export default function UserPlay() {
   const dispatch = useDispatch();
   const allPlays = useSelector((state) => state.plays.allPlays);
@@ -12,6 +13,7 @@ export default function UserPlay() {
 
   useEffect(() => {
     dispatch(fetchAllPlays());
+    dispatch(toggleIsUser());
   }, [dispatch, users]);
 
   return (

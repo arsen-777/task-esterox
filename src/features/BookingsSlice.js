@@ -56,6 +56,7 @@ const bookingsSlice = createSlice({
           playDate,
           status,
           id,
+          playId,
         } = book;
         return {
           playName,
@@ -65,6 +66,7 @@ const bookingsSlice = createSlice({
           status,
           id,
           bookingId,
+          playId,
         };
       });
       const newArrayAdmin = newUserBooks.map((book) => {

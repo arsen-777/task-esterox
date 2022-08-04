@@ -21,7 +21,7 @@ function App() {
     if (user) {
       dispatch(fetchAllUsers());
     }
-  }, [user]);
+  }, [user, dispatch]);
 
   return (
     <div className="relative">
