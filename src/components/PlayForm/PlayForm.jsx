@@ -124,60 +124,62 @@ export default function PlayForm() {
               value={title}
             />
           </div>
-          <div className={styles.dateBlock}>
-            <label htmlFor="date-time">Date/time</label>
-            <input
-              className={styles.dateInput}
-              onChange={(e) => setDate(e.target.value)}
-              type="date"
-              name="date-time"
-              value={date}
-              id="date-time"
-            />
-            {/* <div className={styles.date} onClick={handleDatePicker}></div> */}
-          </div>
-
-          <div className={styles.labelTime}>
-            <label htmlFor="time"></label>
-            <input
-              onChange={(e) => handleTime(e)}
-              type="time"
-              name="time"
-              value={time}
-            />
-          </div>
-          <div>
-            <label htmlFor="seats"></label>
-            <input
-              type="number"
-              onChange={(e) => handleOptionChange(e)}
-              value={seats}
-            />
-          </div>
-          <div>
-            <div className={styles.uploadBlock}>
-              <div>
+          <div className={styles.dateTimeBlock}>
+            <div className={styles.dateBlock}>
+              Date/time
+              <div className={styles.dateLabel}>
                 <input
-                  ref={filePicker}
-                  className={styles.hidden}
-                  onChange={(e) => {
-                    setFileName(e.target.files[0]);
-
-                    // setPhotoUrl(URL.createObjectURL(e.target.files[0]));
-                    // setIsCrop(!isCrop);
-                  }}
-                  type="file"
-                  name="file"
-                  accept="image/*"
+                  className={styles.dateInput}
+                  onChange={(e) => setDate(e.target.value)}
+                  type="date"
+                  name="date-time"
+                  value={date}
+                  id="date-time"
                 />
               </div>
-              <div onClick={handlePick} className={styles.uploadImg}>
-                <img src={upload} alt="" />
-                <p>Upload image</p>
+              <div className={styles.labelTime}>
+                <input
+                  onChange={(e) => handleTime(e)}
+                  type="time"
+                  name="time"
+                  value={time}
+                />
               </div>
             </div>
+          </div>
+          <div className={styles.imgSeats}>
+            <div className={styles.seatsBlock}>
+              <label htmlFor="seats"></label>
+              <input
+                type="number"
+                onChange={(e) => handleOptionChange(e)}
+                value={seats}
+              />
+            </div>
+            <div>
+              <div className={styles.uploadBlock}>
+                <div>
+                  <input
+                    ref={filePicker}
+                    className={styles.hidden}
+                    onChange={(e) => {
+                      setFileName(e.target.files[0]);
 
-            {/* {isCrop && (
+                      // setPhotoUrl(URL.createObjectURL(e.target.files[0]));
+                      // setIsCrop(!isCrop);
+                    }}
+                    type="file"
+                    name="file"
+                    accept="image/*"
+                  />
+                </div>
+                <div onClick={handlePick} className={styles.uploadImg}>
+                  <img src={upload} alt="" />
+                  <p>Upload image</p>
+                </div>
+              </div>
+
+              {/* {isCrop && (
               <Cropper
                 src={photoUrl}
                 style={{ height: 200, width: '100%' }}
@@ -187,8 +189,9 @@ export default function PlayForm() {
                 ref={cropperRef}
               />
             )} */}
-            <div>
-              <img src={fileName} alt="" />
+              <div>
+                <img src={fileName} alt="" />
+              </div>
             </div>
           </div>
           <div>
