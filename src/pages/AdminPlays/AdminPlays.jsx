@@ -5,6 +5,7 @@ import Play from '../../components/Play/Play';
 import { fetchAllPlays } from '../../features/PlaysSlice';
 import AddPlay from '../../components/AddPlay/AddPlay';
 import { toggleIsUser } from '../../features/usersSlice';
+import { Link } from 'react-router-dom';
 export default function AdminPlays() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -14,15 +15,32 @@ export default function AdminPlays() {
 
   const { allPlays } = useSelector((state) => state.plays);
   return (
-    <div className={styles.playsBlock}>
-      <div className={styles.playsContainer}>
-        {allPlays?.length > 0 &&
-          allPlays.map((play) => {
-            return <Play key={play.key} {...play} />;
-          })}
+    <div>
+      <div className={styles.adminContainer}>
+        <div className={styles.adminNav}>
+          <div className={styles.links}>
+            <Link className={styles.link} to="/adminplays">
+              Plays
+            </Link>
+            <Link className={styles.link} to="/adminbookings">
+              Bookings
+            </Link>
+          </div>
+          <div>
+            <p>Admin</p>
+          </div>
+        </div>
       </div>
-      <div>
-        <AddPlay />
+
+      <div className={styles.playsBlock}>
+        <div className={styles.playsContainer}>
+          {allPlays?.length > 0 &&
+            allPlays.map((play) => {
+              return <Play key={play.key} {...play} />;
+            })}
+
+          <AddPlay />
+        </div>
       </div>
     </div>
   );

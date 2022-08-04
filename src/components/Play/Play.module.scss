@@ -31,24 +31,29 @@
   display: flex;
   width: 25px;
   height: 25px;
-  border: none;
+  cursor: pointer;
 }
 .dateTime {
   width: 50%;
   display: flex;
   justify-content: space-between;
+
+  & p {
+    font-size: 18px;
+    color: rgb(107, 91, 0);
+  }
 }
 
 .playBlock {
   width: 300px;
-  height: auto;
+  height: 400px;
   display: flex;
   flex-flow: column;
   justify-content: space-around;
   align-items: center;
-  border: 1px solid rgb(91, 86, 86);
-  border-radius: 25px;
-  background-color: rgb(140, 179, 218);
+  border: 1px solid rgb(192, 174, 174);
+  border-radius: 8px;
+  background-color: rgb(150, 160, 170);
   box-shadow: 5px 10px 10px 10px rgba(103, 36, 36, 0.3);
 }
 .img {
@@ -62,7 +67,7 @@
 }
 
 .book {
-  width: 80%;
+  width: 100%;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -79,11 +84,13 @@
     font-size: 16px;
     cursor: pointer;
     &:hover {
-      background-color: #525070;
+      transition: 0.7s;
+      background-color: #fff;
+      color: #201d3f;
     }
   }
   & input {
-    width: 30px;
+    width: 40px;
     height: 30px;
     border: 1px solid #525070;
     border-radius: 5px;
@@ -99,4 +106,27 @@
 .booked {
   color: red;
   font-size: 18px;
+}
+
+.inpBtn {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.title {
+  & p {
+    font-size: 20px;
+  }
+}
+
+.tickets {
+  & p {
+    font-size: 18px;
+    font-style: italic;
+  }
+  & span {
+    font-style: normal;
+    color: rgb(126, 7, 7);
+  }
 }

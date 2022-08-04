@@ -34,27 +34,29 @@ export default function Login() {
       });
   };
   return (
-    <div className={styles.loginContainer}>
-      <form onSubmit={handlerOnSubmit}>
-        <h2>Login</h2>
-        <div className={styles.formBlock}>
-          <div>
-            <label htmlFor="mail">Email</label>
-            <input ref={mailRef} type="email" name="name" />
+    <div className={styles.loginBg}>
+      <div className={styles.loginContainer}>
+        <form onSubmit={handlerOnSubmit}>
+          <h2>Login</h2>
+          <div className={styles.formBlock}>
+            <div>
+              <label htmlFor="mail">Email</label>
+              <input ref={mailRef} type="email" name="name" />
+            </div>
+            <div>
+              <label htmlFor="pass">Password</label>
+              <input ref={passRef} type="password" name="pass" />
+            </div>
           </div>
-          <div>
-            <label htmlFor="pass">Password</label>
-            <input ref={passRef} type="password" name="pass" />
-          </div>
-        </div>
 
-        <div className={styles.signUpLogin}>
-          <button type="submit">Log In</button>
-          <Link to="/signUp">
-            <button>Sign Up</button>
-          </Link>
-        </div>
-      </form>
+          <div className={styles.signUpLogin}>
+            <button type="submit">Log In</button>
+            <Link to="/signUp">
+              <button>Sign Up</button>
+            </Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

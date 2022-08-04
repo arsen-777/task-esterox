@@ -12,11 +12,18 @@ import uuid from 'react-uuid';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import upload from '../../asets/images/upload.svg';
+import dateImg from '../../asets/images/date.svg';
 
 export default function PlayForm() {
   const filePicker = useRef(null);
+  const datePicker = useRef(null);
   const handlePick = () => {
+    // console.log(filePicker.current.click());
     filePicker.current.click();
+  };
+  const handleDatePicker = () => {
+    console.log(datePicker.current.click());
+    datePicker.current.click();
   };
   const cropperRef = useRef(null);
   const onCrop = () => {
@@ -108,7 +115,7 @@ export default function PlayForm() {
       <div className={styles.modalAbsolute}>
         <h3>Add New play</h3>
         <form onSubmit={submitHandler} className={styles.formBlock}>
-          <div>
+          <div className={styles.label}>
             <label htmlFor="title">Title</label>
             <input
               onChange={(e) => setTitle(e.target.value)}
@@ -117,16 +124,20 @@ export default function PlayForm() {
               value={title}
             />
           </div>
-          <div>
+          <div className={styles.dateBlock}>
             <label htmlFor="date-time">Date/time</label>
             <input
+              className={styles.dateInput}
               onChange={(e) => setDate(e.target.value)}
               type="date"
               name="date-time"
               value={date}
+              id="date-time"
             />
+            {/* <div className={styles.date} onClick={handleDatePicker}></div> */}
           </div>
-          <div>
+
+          <div className={styles.labelTime}>
             <label htmlFor="time"></label>
             <input
               onChange={(e) => handleTime(e)}

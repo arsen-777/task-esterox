@@ -1,15 +1,21 @@
 .userPlay {
   display: flex;
+  width: 100%;
   justify-content: space-evenly;
+  flex-flow: wrap;
 }
 .container {
-  padding: 0 20px;
   height: 45px;
   border-bottom: 4px solid rgb(63, 58, 58);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
+  width: 98vw;
+  padding: 0 20px;
+  height: 55px;
+  position: fixed;
+  background-color: lightblue;
+
   & p {
     font-size: 18px;
     font-style: italic;
@@ -18,8 +24,8 @@
 .navMenu {
   width: 10%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 .nav {
   width: 10%;
@@ -34,4 +40,14 @@
   &:hover {
     color: rgb(19, 122, 156);
   }
+}
+
+.playsBlock {
+  background-image: url('../../asets/images/ticket.webp');
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: space-around;
+  height: 100vh;
+  padding-top: 100px;
 }

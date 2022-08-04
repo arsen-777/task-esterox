@@ -76,8 +76,8 @@ export default function Play({ id, title, image, date, time, seats }) {
     <>
       <div className={styles.playBlock}>
         <div className={styles.titleBlock}>
-          <div>
-            <h4>{title}</h4>
+          <div className={styles.title}>
+            <p>{title}</p>
           </div>
           <div className={styles.delEdit}>
             <div onClick={() => handleModal(id)} className={styles.editBlock}>
@@ -99,17 +99,19 @@ export default function Play({ id, title, image, date, time, seats }) {
             <p>{time}</p>
           </div>
         </div>
-        <div>
+        <div className={styles.tickets}>
           {seats == 0 ? (
             <p>NO available tickets</p>
           ) : (
-            <p>available tickets - {seats}</p>
+            <p>
+              Available tickets - <span className={styles.count}>{seats}</span>
+            </p>
           )}
         </div>
         {!isBooked ? (
           <div className={styles.book}>
             {isUser && (
-              <div>
+              <div className={styles.inpBtn}>
                 <button onClick={updateSeat}>Book</button>
 
                 <input

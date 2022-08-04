@@ -1,9 +1,45 @@
 .playsContainer {
-  width: 80%;
+  width: 100%;
+  height: 100vh;
+  margin-top: 100px;
   display: flex;
   justify-content: space-evenly;
 }
 .playsBlock {
+  background-image: url('../../asets/images/ticket.webp');
+  background-repeat: no-repeat;
+  background-size: cover;
   display: flex;
   justify-content: space-around;
+}
+.adminContainer {
+  height: 55px;
+  position: fixed;
+  background-color: lightblue;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.adminNav {
+  padding: 0 25px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 97vw;
+  & p {
+    font-size: 22px;
+    font-style: italic;
+  }
+}
+.links {
+  display: flex;
+  justify-content: space-between;
+  width: 12%;
+}
+
+.link {
+  text-decoration: none;
+  font-size: 20px;
+  color: black;
 }

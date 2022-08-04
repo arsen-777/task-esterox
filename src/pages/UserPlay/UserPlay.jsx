@@ -33,11 +33,13 @@ export default function UserPlay() {
           </p>
         </div>
       </div>
-      <div className={styles.userPlay}>
-        {allPlays.length > 0 &&
-          allPlays.map((play) => {
-            return <Play key={play.id} {...play} />;
-          })}
+      <div className={styles.playsBlock}>
+        <div className={styles.userPlay}>
+          {allPlays.length > 0 &&
+            allPlays.map((play) => {
+              return <Play key={play.id} {...play} />;
+            })}
+        </div>
       </div>
     </>
   );
