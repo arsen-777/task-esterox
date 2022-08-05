@@ -14,7 +14,7 @@ export default function UserPlay() {
   useEffect(() => {
     dispatch(fetchAllPlays());
     dispatch(toggleIsUser());
-  }, [dispatch, users]);
+  }, [dispatch, users, email]);
 
   return (
     <>

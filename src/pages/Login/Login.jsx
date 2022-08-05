@@ -21,10 +21,10 @@ export default function Login() {
     )
       .then((userCredential) => {
         const user = userCredential.user;
-
+        console.log(user, 'user -----------------------');
         if (user) {
           dispatch(fetchAllUsers());
-          dispatch(toggleIsUser());
+          // dispatch(toggleIsUser());
           return navigate('/userplay');
         }
       })
@@ -51,6 +51,9 @@ export default function Login() {
 
           <div className={styles.signUpLogin}>
             <button type="submit">Log In</button>
+            {/* <Link to="/userplay">
+             
+            </Link> */}
             <Link to="/signUp">
               <button>Sign Up</button>
             </Link>

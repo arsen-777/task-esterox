@@ -19,6 +19,7 @@ export default function SignUp() {
     );
 
     function writeUserData(userId, name, email) {
+      console.log(userId, name, email, 'registratia');
       const db = getDatabase();
       set(ref(db, 'users/' + userId), {
         username: name,
@@ -47,10 +48,13 @@ export default function SignUp() {
           </div>
         </div>
         <div className={styles.signUpLogin}>
-          <button type="submit">Register</button>
           <Link className={styles.link} to="/login">
-            <button> LOGIN</button>
+            <button type="submit">Register</button>
           </Link>
+
+          {/* <Link className={styles.link} to="/login">
+            <button> LOGIN</button>
+          </Link> */}
         </div>
       </form>
     </div>

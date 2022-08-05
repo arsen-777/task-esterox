@@ -21,15 +21,11 @@ export default function Booking({
     setIsApproved(true);
   };
 
-  const handleStatus = () => {
-    setChangedStatus('Approved');
-  };
-
   // useEffect(() => {
   //   setIsApproved(true);
   // }, [status]);
 
-  const updateStatus = () => {
+  const updateStatus = (status) => {
     const updatedBook = {
       bookedDate,
       email,
@@ -37,7 +33,7 @@ export default function Booking({
       playDate,
       ticketsCount,
       username,
-      status: 'Approved',
+      status: status,
       bookingId,
     };
     try {
@@ -64,14 +60,28 @@ export default function Booking({
         <p>{bookedDate}</p>
       </div>
       <div className={styles.size}>
-        {status === 'Approved' ? (
-          <p className={styles.approved}>{status}</p>
+        {status === 'Approved' || status === 'Reject' ? (
+          <p
+            style={
+              status === 'Approved' ? { color: 'green' } : { color: 'red' }
+            }
+          >
+            {status}
+          </p>
         ) : (
           <>
-            <button onClick={updateStatus} className={styles.btnApprove}>
+            <button
+              onClick={() => updateStatus('Approved')}
+              className={styles.btnApprove}
+            >
               Approve
             </button>
-            <button className={styles.btnReject}>Reject</button>
+            <button
+              onClick={() => updateStatus('Reject')}
+              className={styles.btnReject}
+            >
+              Reject
+            </button>
           </>
         )}
       </div>

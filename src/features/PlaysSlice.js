@@ -5,7 +5,6 @@ import {
   get,
   child,
   update,
-  push,
   remove,
 } from 'firebase/database';
 
@@ -58,7 +57,6 @@ const playsSlice = createSlice({
     plays: [],
     allPlays: [],
     isOpen: false,
-    isEdited: false,
     mostBeEdited: null,
     isBooked: false,
   },
@@ -69,13 +67,14 @@ const playsSlice = createSlice({
     toggleIsOpen(state) {
       state.isOpen = !state.isOpen;
     },
+
     toggleIsEdited(state) {
       state.isEdited = !state.isEdited;
     },
     editMostBeEdited(state, action) {
       state.mostBeEdited = action.payload.id;
     },
-    deleteEditedPlayIe(state, action) {
+    deleteEditedPlayId(state, action) {
       state.mostBeEdited = action.payload;
     },
     toggleIsBooked(state) {
@@ -122,7 +121,7 @@ export const {
   toggleIsOpen,
   editMostBeEdited,
   editPlay,
-  deleteEditedPlayIe,
+  deleteEditedPlayId,
   toggleIsBooked,
   deletePlay,
 } = playsSlice.actions;

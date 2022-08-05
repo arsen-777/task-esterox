@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import styles from './Play.module.scss';
 import edit from '../../asets/images/edit1.svg';
 import del from '../../asets/images/delete.svg';
@@ -12,16 +12,13 @@ import { getDatabase, ref, set, push } from 'firebase/database';
 import { fetchUpdateSeat } from '../../features/PlaysSlice';
 import { fetchBookings } from '../../features/BookingsSlice';
 import { dateToUTC } from '../../helpers/formaterDate';
-import useAuth from '../hooks/useAuth';
-import { toggleIsUser } from '../../features/usersSlice';
+
 export default function Play({ id, title, image, date, time, seats }) {
   const dispatch = useDispatch();
   const { isUser } = useSelector((state) => state.users);
   const { users } = useSelector((state) => state.users);
-  const user = useAuth();
   const { bookingsUser } = useSelector((state) => state.bookings);
-  // console.log(user?.uid, 'user');
-  const [bookCount, setBookCount] = useState(0);
+  const [bookCount, setBookCount] = useState();
   const [message, setMessage] = useState('');
   let isBooked = bookingsUser.find((item) => item.playId === id);
   const handleModal = () => {
@@ -29,9 +26,6 @@ export default function Play({ id, title, image, date, time, seats }) {
     dispatch(editMostBeEdited({ id }));
   };
 
-  useEffect(() => {
-    dispatch(toggleIsUser());
-  }, [dispatch]);
   const updateSeat = () => {
     const obj = {
       id: id,
@@ -62,16 +56,18 @@ export default function Play({ id, title, image, date, time, seats }) {
     dispatch(fetchBookings(bookedObject));
   };
   const handleBook = (e) => {
-    if (+seats) {
+    if (+seats && e.target.value > 0) {
       setBookCount(e.target.value);
-    } else {
+    }
+    if (e.target.value < 0) {
+      alert('Please write correct number');
+    } else if (!seats) {
       setMessage('No tickets');
     }
   };
   const deletePlay = (id) => {
     dispatch(fetchDeletePlay(id));
   };
-  console.log(isUser, 'isUser--------');
   return (
     <>
       <div className={styles.playBlock}>
@@ -79,14 +75,16 @@ export default function Play({ id, title, image, date, time, seats }) {
           <div className={styles.title}>
             <p>{title}</p>
           </div>
-          <div className={styles.delEdit}>
-            <div onClick={() => handleModal(id)} className={styles.editBlock}>
-              <img src={edit} alt="" />
+          {!isUser && (
+            <div className={styles.delEdit}>
+              <div onClick={() => handleModal(id)} className={styles.editBlock}>
+                <img src={edit} alt="" />
+              </div>
+              <div onClick={() => deletePlay(id)} className={styles.delete}>
+                <img src={del} alt="" />
+              </div>
             </div>
-            <div onClick={() => deletePlay(id)} className={styles.delete}>
-              <img src={del} alt="" />
-            </div>
-          </div>
+          )}
         </div>
         <div className={styles.img}>
           <img src={image} alt="" />
@@ -100,8 +98,8 @@ export default function Play({ id, title, image, date, time, seats }) {
           </div>
         </div>
         <div className={styles.tickets}>
-          {seats == 0 ? (
-            <p>NO available tickets</p>
+          {+seats === 0 ? (
+            <p>NO available tickets </p>
           ) : (
             <p>
               Available tickets - <span className={styles.count}>{seats}</span>
@@ -110,7 +108,7 @@ export default function Play({ id, title, image, date, time, seats }) {
         </div>
         {!isBooked ? (
           <div className={styles.book}>
-            {isUser && (
+            {isUser && seats && (
               <div className={styles.inpBtn}>
                 <button onClick={updateSeat}>Book</button>
 

@@ -10,7 +10,7 @@ export default function AdminPlays() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchAllPlays());
-    dispatch(toggleIsUser());
+    // dispatch(toggleIsUser());
   }, [dispatch]);
 
   const { allPlays } = useSelector((state) => state.plays);

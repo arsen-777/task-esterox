@@ -1,35 +1,35 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { getDatabase, ref, update, set, push } from 'firebase/database';
 import { fetchPlays } from '../../features/PlaysSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   toggleIsOpen,
   editPlay,
-  deleteEditedPlayIe,
+  deleteEditedPlayId,
+  toggleIsOutsideClick,
 } from '../../features/PlaysSlice';
 import styles from './PlayForm.module.scss';
 import uuid from 'react-uuid';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import upload from '../../asets/images/upload.svg';
-import dateImg from '../../asets/images/date.svg';
+import useClickOutside from '../hooks/useClickOutside';
 
 export default function PlayForm() {
   const filePicker = useRef(null);
-  const datePicker = useRef(null);
+  const modalRef = useRef(null);
   const handlePick = () => {
-    // console.log(filePicker.current.click());
     filePicker.current.click();
   };
-  const handleDatePicker = () => {
-    console.log(datePicker.current.click());
-    datePicker.current.click();
-  };
+  // const handleDatePicker = () => {
+  //   console.log(datePicker.current.click());
+  //   datePicker.current.click();
+  // };
   const cropperRef = useRef(null);
   const onCrop = () => {
     const imageElement = cropperRef?.current;
     const cropper = imageElement?.cropper;
-    console.log(cropper.getCroppedCanvas().toDataURL(), 'croppppppppperrrrrr');
+    // console.log(cropper.getCroppedCanvas().toDataURL(), 'croppppppppperrrrrr');
   };
   const { mostBeEdited, allPlays } = useSelector((state) => state.plays);
   const editedCard = allPlays.find((play) => play.id === mostBeEdited);
@@ -39,11 +39,14 @@ export default function PlayForm() {
   const [fileName, setFileName] = useState(editedCard?.image);
   const [seats, setSeats] = useState(editedCard?.seats || '');
   const [isCrop, setIsCrop] = useState(false);
+  const { isOutsideClick } = useSelector((state) => state.plays);
+
   // const [photoUrl, setPhotoUrl] = useState('');
   const db = getDatabase();
 
   const dispatch = useDispatch();
   const closeModal = () => {
+    dispatch(deleteEditedPlayId(null));
     dispatch(toggleIsOpen());
   };
   function handleOptionChange(e) {
@@ -52,6 +55,10 @@ export default function PlayForm() {
   function handleTime(e) {
     setTime(e.target.value);
   }
+
+  useEffect(() => {
+    dispatch(toggleIsOpen());
+  }, [dispatch]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -99,7 +106,7 @@ export default function PlayForm() {
       };
 
       try {
-        dispatch(deleteEditedPlayIe(null));
+        dispatch(deleteEditedPlayId(null));
         console.log('entered try----');
         update(ref(db, `plays/${mostBeEdited}`), obj);
         dispatch(editPlay({ obj, mostBeEdited }));
@@ -109,10 +116,10 @@ export default function PlayForm() {
       closeModal();
     };
   };
-
+  useClickOutside(modalRef, () => dispatch(toggleIsOpen()), isOutsideClick);
   return (
     <div className={styles.modal}>
-      <div className={styles.modalAbsolute}>
+      <div ref={modalRef} className={styles.modalAbsolute}>
         <h3>Add New play</h3>
         <form onSubmit={submitHandler} className={styles.formBlock}>
           <div className={styles.label}>
@@ -125,31 +132,33 @@ export default function PlayForm() {
             />
           </div>
           <div className={styles.dateTimeBlock}>
-            <div className={styles.dateBlock}>
-              Date/time
-              <div className={styles.dateLabel}>
-                <input
-                  className={styles.dateInput}
-                  onChange={(e) => setDate(e.target.value)}
-                  type="date"
-                  name="date-time"
-                  value={date}
-                  id="date-time"
-                />
-              </div>
-              <div className={styles.labelTime}>
-                <input
-                  onChange={(e) => handleTime(e)}
-                  type="time"
-                  name="time"
-                  value={time}
-                />
+            <div className={styles.paragraph}>
+              <label htmlFor="">Date/time</label>
+              <div className={styles.dateBlock}>
+                <div className={styles.dateLabel}>
+                  <input
+                    className={styles.dateInput}
+                    onChange={(e) => setDate(e.target.value)}
+                    type="date"
+                    name="date-time"
+                    value={date}
+                    id="date-time"
+                  />
+                </div>
+                <div className={styles.labelTime}>
+                  <input
+                    onChange={(e) => handleTime(e)}
+                    type="time"
+                    name="time"
+                    value={time}
+                  />
+                </div>
               </div>
             </div>
           </div>
           <div className={styles.imgSeats}>
             <div className={styles.seatsBlock}>
-              <label htmlFor="seats"></label>
+              <label htmlFor="seats">Seats count</label>
               <input
                 type="number"
                 onChange={(e) => handleOptionChange(e)}
@@ -174,8 +183,10 @@ export default function PlayForm() {
                   />
                 </div>
                 <div onClick={handlePick} className={styles.uploadImg}>
-                  <img src={upload} alt="" />
                   <p>Upload image</p>
+                  <div>
+                    <img src={upload} alt="" />
+                  </div>
                 </div>
               </div>
 
@@ -189,12 +200,12 @@ export default function PlayForm() {
                 ref={cropperRef}
               />
             )} */}
-              <div>
+              <div className={styles.img}>
                 <img src={fileName} alt="" />
               </div>
             </div>
           </div>
-          <div>
+          <div className={styles.buttonsBlock}>
             <button onClick={closeModal}>Cancel</button>
             <button type="submit">Save</button>
             <button onClick={updateOnePlays} type="submit">

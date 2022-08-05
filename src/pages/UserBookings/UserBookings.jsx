@@ -5,6 +5,8 @@ import { fetchBookings } from '../../features/BookingsSlice';
 import UserBooking from '../../components/UserBooking/UserBooking';
 import { Link } from 'react-router-dom';
 export default function UserBookings() {
+  const { users } = useSelector((state) => state.users);
+  const email = users[0]?.email;
   const { bookingsUser } = useSelector((state) => state.bookings);
 
   const dispatch = useDispatch();
@@ -23,7 +25,7 @@ export default function UserBookings() {
           </Link>
         </div>
         <div>
-          <div>Admin</div>
+          <div>{email}</div>
         </div>
       </div>
       <div className={styles.bookingContainer}>
