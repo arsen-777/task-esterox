@@ -3,7 +3,6 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchAllUsers } from '../../features/usersSlice';
 import { useDispatch } from 'react-redux';
-import { toggleIsUser } from '../../features/usersSlice';
 import styles from './Login.module.scss';
 const auth = getAuth();
 export default function Login() {

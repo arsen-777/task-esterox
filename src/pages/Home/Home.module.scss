@@ -38,6 +38,7 @@
 .bgBlock {
   background-image: url('../../asets/images/bg.jpg');
   background-position: center;
-  background-size: contain;
+  background-size: cover;
+  background-repeat: no-repeat;
   height: 100vh;
 }

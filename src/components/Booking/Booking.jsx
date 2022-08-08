@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './Booking.module.scss';
 import { getDatabase, ref, set, push } from 'firebase/database';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUpdateStatus } from '../../features/BookingsSlice';
+import { fetchUpdateStatus, fetchBookings } from '../../features/BookingsSlice';
 export default function Booking({
   bookedDate,
   email,
@@ -22,9 +22,8 @@ export default function Booking({
   };
 
   // useEffect(() => {
-  //   setIsApproved(true);
+  //   dispatch(fetchBookings());
   // }, [status]);
-
   const updateStatus = (status) => {
     const updatedBook = {
       bookedDate,

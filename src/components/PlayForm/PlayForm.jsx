@@ -6,7 +6,6 @@ import {
   toggleIsOpen,
   editPlay,
   deleteEditedPlayId,
-  toggleIsOutsideClick,
 } from '../../features/PlaysSlice';
 import styles from './PlayForm.module.scss';
 import uuid from 'react-uuid';
@@ -31,7 +30,9 @@ export default function PlayForm() {
     const cropper = imageElement?.cropper;
     // console.log(cropper.getCroppedCanvas().toDataURL(), 'croppppppppperrrrrr');
   };
-  const { mostBeEdited, allPlays } = useSelector((state) => state.plays);
+  const { mostBeEdited, allPlays, addMessage, editMessage } = useSelector(
+    (state) => state.plays
+  );
   const editedCard = allPlays.find((play) => play.id === mostBeEdited);
   const [title, setTitle] = useState(editedCard?.title || '');
   const [date, setDate] = useState(editedCard?.date || '');
@@ -42,8 +43,8 @@ export default function PlayForm() {
   const { isOutsideClick } = useSelector((state) => state.plays);
 
   // const [photoUrl, setPhotoUrl] = useState('');
+  // console.log(photoUrl, 'photoUrl');
   const db = getDatabase();
-
   const dispatch = useDispatch();
   const closeModal = () => {
     dispatch(deleteEditedPlayId(null));
@@ -120,7 +121,7 @@ export default function PlayForm() {
   return (
     <div className={styles.modal}>
       <div ref={modalRef} className={styles.modalAbsolute}>
-        <h3>Add New play</h3>
+        <h3> {!mostBeEdited ? addMessage : editMessage}</h3>
         <form onSubmit={submitHandler} className={styles.formBlock}>
           <div className={styles.label}>
             <label htmlFor="title">Title</label>
@@ -191,15 +192,15 @@ export default function PlayForm() {
               </div>
 
               {/* {isCrop && (
-              <Cropper
-                src={photoUrl}
-                style={{ height: 200, width: '100%' }}
-                initialAspectRatio={16 / 9}
-                guides={false}
-                crop={onCrop}
-                ref={cropperRef}
-              />
-            )} */}
+                <Cropper
+                  src={photoUrl}
+                  style={{ height: 200, width: '100%' }}
+                  initialAspectRatio={16 / 9}
+                  guides={false}
+                  crop={onCrop}
+                  ref={cropperRef}
+                />
+              )} */}
               <div className={styles.img}>
                 <img src={fileName} alt="" />
               </div>
@@ -207,13 +208,29 @@ export default function PlayForm() {
           </div>
           <div className={styles.buttonsBlock}>
             <button onClick={closeModal}>Cancel</button>
-            <button type="submit">Save</button>
-            <button onClick={updateOnePlays} type="submit">
-              Update
-            </button>
+            {!mostBeEdited && <button type="submit">Save</button>}
+            {mostBeEdited && (
+              <button onClick={updateOnePlays} type="submit">
+                Update
+              </button>
+            )}
           </div>
         </form>
       </div>
     </div>
   );
 }
+
+////////
+
+// 1) add ev edit jamanak buttonnery petq e erevan hamapatasxanabar  // plus
+// 2) close icon-y poxel jnjelu                                     // plus
+// 3) hastatelu hamar modal baci
+// 4)  / -i  backgroundy repeat                                     // plus
+// 5) seats i mej karoxana dzerov grel
+// 6) playname aprove aneluc trnuma
+//7) admin booked nael
+// 8) firefox -i vra input type time dzel ev width-y
+// 9) fixel booked qanaky minus chgna
+// 10) fixel tarber userneri book ery i pahy
+// 11) registratia jamanak link dnel vor gna login

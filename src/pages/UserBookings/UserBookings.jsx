@@ -17,10 +17,10 @@ export default function UserBookings() {
     <div className={styles.container}>
       <div className={styles.navMenu}>
         <div className={styles.nav}>
-          <Link className={styles.link} to={'userplays'}>
+          <Link className={styles.link} to={'/userplay'}>
             Plays
           </Link>
-          <Link className={styles.link} to={'userbookings'}>
+          <Link className={styles.link} to={'/userbookings'}>
             Bookings
           </Link>
         </div>
@@ -46,7 +46,7 @@ export default function UserBookings() {
           <h3>Status</h3>
         </div>
       </div>
-      {bookingsUser?.length &&
+      {bookingsUser &&
         bookingsUser.map((book) => {
           return <UserBooking key={book.bookingId} {...book} />;
         })}

@@ -12,6 +12,7 @@ import AdminBookings from './pages/AdminBookings/AdminBookings';
 import { useEffect } from 'react';
 import { fetchAllUsers } from './features/usersSlice';
 import useAuth from './components/hooks/useAuth';
+import ProtectedRoutes from './ProtectedRoutes';
 function App() {
   const dispatch = useDispatch();
   const { isOpen } = useSelector((state) => state.plays);
@@ -31,8 +32,22 @@ function App() {
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/adminplays" element={<AdminPlays />} />
-          <Route path="/userplay" element={<UserPlay />} />
-          <Route path="/userbookings" element={<UserBookings />} />
+          <Route
+            path="/userplay"
+            element={
+              // <ProtectedRoutes user={user}>
+              <UserPlay />
+              // </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/userbookings"
+            element={
+              // <ProtectedRoutes user={user}>
+              <UserBookings />
+              // </ProtectedRoutes>
+            }
+          />
           <Route path="/adminbookings" element={<AdminBookings />} />
         </Routes>
       </BrowserRouter>

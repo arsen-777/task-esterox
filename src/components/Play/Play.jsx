@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import styles from './Play.module.scss';
-import edit from '../../asets/images/edit1.svg';
-import del from '../../asets/images/delete.svg';
+import edit from '../../asets/images/eee.svg';
+import del from '../../asets/images/dd.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   toggleIsOpen,
   editMostBeEdited,
   fetchDeletePlay,
+  editMessage,
 } from '../../features/PlaysSlice';
 import { getDatabase, ref, set, push } from 'firebase/database';
 import { fetchUpdateSeat } from '../../features/PlaysSlice';
@@ -24,8 +25,10 @@ export default function Play({ id, title, image, date, time, seats }) {
   const handleModal = () => {
     dispatch(toggleIsOpen());
     dispatch(editMostBeEdited({ id }));
+    dispatch(editMessage('Edit play'));
   };
 
+  // console.log(users[0]?.id, '-----------------------');
   const updateSeat = () => {
     const obj = {
       id: id,
@@ -42,11 +45,12 @@ export default function Play({ id, title, image, date, time, seats }) {
       status: 'pending',
       ticketsCount: bookCount,
       bookedDate: dateToUTC(new Date()),
+      userId: users[0]?.id,
       ...users[0],
     };
     try {
       const db = getDatabase();
-      const postListRef = ref(db, 'bookings');
+      const postListRef = ref(db, 'bookings/' + users[0]?.id);
       const newPostRef = push(postListRef);
       set(newPostRef, bookedObject);
     } catch (error) {

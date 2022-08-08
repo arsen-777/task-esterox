@@ -6,10 +6,11 @@ import Booking from '../../components/Booking/Booking';
 import { Link } from 'react-router-dom';
 export default function AdminBookings() {
   const dispatch = useDispatch();
+
+  const { bookingsAdmin } = useSelector((state) => state.bookings);
   useEffect(() => {
     dispatch(fetchBookings());
   }, [dispatch]);
-  const { bookingsAdmin } = useSelector((state) => state.bookings);
   return (
     <>
       <div className={styles.container}>
@@ -48,6 +49,7 @@ export default function AdminBookings() {
         </div>
         {bookingsAdmin?.length &&
           bookingsAdmin.map((book) => {
+            console.log(book, '----------------------------');
             return <Booking key={book.bookingId} {...book} />;
           })}
       </div>

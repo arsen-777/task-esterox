@@ -1,14 +1,17 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { getDatabase, ref, set } from 'firebase/database';
 import { Link } from 'react-router-dom';
 import styles from './SignUp.module.scss';
+import useAuth from '../../components/hooks/useAuth';
+
 const auth = getAuth();
+
 export default function SignUp() {
   const nameRef = useRef(null);
   const mailRef = useRef(null);
   const passRef = useRef(null);
-
+  const user = useAuth();
   const handlerOnSubmit = async (e) => {
     console.log('start');
     e.preventDefault();
@@ -19,7 +22,7 @@ export default function SignUp() {
     );
 
     function writeUserData(userId, name, email) {
-      console.log(userId, name, email, 'registratia');
+      // console.log(userId, name, email, 'registratia');
       const db = getDatabase();
       set(ref(db, 'users/' + userId), {
         username: name,
@@ -48,13 +51,12 @@ export default function SignUp() {
           </div>
         </div>
         <div className={styles.signUpLogin}>
-          <Link className={styles.link} to="/login">
-            <button type="submit">Register</button>
-          </Link>
-
-          {/* <Link className={styles.link} to="/login">
-            <button> LOGIN</button>
-          </Link> */}
+          <button type="submit">Register</button>
+          {user && (
+            <Link to="/login">
+              <button>Login</button>
+            </Link>
+          )}
         </div>
       </form>
     </div>

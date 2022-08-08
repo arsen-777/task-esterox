@@ -31,7 +31,7 @@ export const fetchUpdateSeat = createAsyncThunk(
   'plays/fetchUpdateSeat',
   async function (obj, { dispatch }) {
     const db = getDatabase();
-    console.log(obj, 'iddddddddddddddddddddd');
+
     try {
       update(ref(db, `plays/${obj.id}`), obj);
 
@@ -59,6 +59,8 @@ const playsSlice = createSlice({
     isOpen: false,
     mostBeEdited: null,
     isBooked: false,
+    addMessage: '',
+    editMessage: '',
   },
   reducers: {
     addPost(state, action) {
@@ -80,9 +82,15 @@ const playsSlice = createSlice({
     toggleIsBooked(state) {
       state.isBooked = true;
     },
+    addMessage(state, action) {
+      state.addMessage = action.payload;
+    },
+    editMessage(state, action) {
+      state.editMessage = action.payload;
+    },
     editPlay(state, action) {
       const { mostBeEdited, obj } = action.payload;
-      console.log(mostBeEdited, 'edit playi id');
+
       const changedPlays = state.allPlays.map((play) => {
         if (play.id === mostBeEdited) {
           return (play = { id: mostBeEdited, ...obj });
@@ -124,6 +132,8 @@ export const {
   deleteEditedPlayId,
   toggleIsBooked,
   deletePlay,
+  addMessage,
+  editMessage,
 } = playsSlice.actions;
 
 export default playsSlice.reducer;
