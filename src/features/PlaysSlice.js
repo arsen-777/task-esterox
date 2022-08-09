@@ -61,11 +61,13 @@ const playsSlice = createSlice({
     isBooked: false,
     addMessage: '',
     editMessage: '',
+    isLoading: false,
   },
   reducers: {
     addPost(state, action) {
       state.plays.push(action.payload);
     },
+
     toggleIsOpen(state) {
       state.isOpen = !state.isOpen;
     },
@@ -134,6 +136,7 @@ export const {
   deletePlay,
   addMessage,
   editMessage,
+  toggleIsLoading,
 } = playsSlice.actions;
 
 export default playsSlice.reducer;

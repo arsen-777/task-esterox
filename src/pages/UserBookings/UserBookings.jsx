@@ -6,13 +6,14 @@ import UserBooking from '../../components/UserBooking/UserBooking';
 import { Link } from 'react-router-dom';
 export default function UserBookings() {
   const { users } = useSelector((state) => state.users);
+  // const { id } = users[0];
   const email = users[0]?.email;
   const { bookingsUser } = useSelector((state) => state.bookings);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchBookings());
-  }, [dispatch]);
+    dispatch(fetchBookings({ id: users[0]?.id }));
+  }, [dispatch, users]);
   return (
     <div className={styles.container}>
       <div className={styles.navMenu}>

@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import styles from './Booking.module.scss';
 import { getDatabase, ref, set, push } from 'firebase/database';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUpdateStatus, fetchBookings } from '../../features/BookingsSlice';
+import {
+  fetchUpdateStatus,
+  fetchAllBookings,
+} from '../../features/BookingsSlice';
+import useAuth from '../hooks/useAuth';
+
 export default function Booking({
   bookedDate,
   email,
@@ -14,17 +19,10 @@ export default function Booking({
   playDate,
   bookingId,
 }) {
+  const user = useAuth();
   const dispatch = useDispatch();
-  const [isApproved, setIsApproved] = useState(false);
-  const [changedStatus, setChangedStatus] = useState('');
-  const handleApprove = () => {
-    setIsApproved(true);
-  };
-
-  // useEffect(() => {
-  //   dispatch(fetchBookings());
-  // }, [status]);
   const updateStatus = (status) => {
+    dispatch(fetchAllBookings(user?.uid));
     const updatedBook = {
       bookedDate,
       email,
@@ -36,7 +34,7 @@ export default function Booking({
       bookingId,
     };
     try {
-      dispatch(fetchUpdateStatus(updatedBook));
+      dispatch(fetchUpdateStatus({ obj: updatedBook, id }));
     } catch (error) {
       console.log('error in catch');
     }

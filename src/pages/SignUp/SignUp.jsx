@@ -53,8 +53,8 @@ export default function SignUp() {
         <div className={styles.signUpLogin}>
           <button type="submit">Register</button>
           {user && (
-            <Link to="/login">
-              <button>Login</button>
+            <Link className={styles.link} to="/login">
+              Login
             </Link>
           )}
         </div>

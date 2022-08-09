@@ -36,7 +36,7 @@ export default function AdminPlays() {
         <div className={styles.playsContainer}>
           {allPlays?.length > 0 &&
             allPlays.map((play) => {
-              return <Play key={play.key} {...play} />;
+              return <Play key={play.id} {...play} />;
             })}
 
           <AddPlay />

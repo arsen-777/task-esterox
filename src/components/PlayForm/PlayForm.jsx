@@ -90,10 +90,14 @@ export default function PlayForm() {
     };
   };
   const updateOnePlays = (e) => {
+    let str = prompt('Are you sure to update play? yes/no');
+    console.log(str);
     e.preventDefault();
     // change file type to blob
+
     let file;
     let reader = new FileReader();
+
     reader.readAsDataURL(fileName);
     reader.onload = function async() {
       file = reader.result;
@@ -107,10 +111,12 @@ export default function PlayForm() {
       };
 
       try {
-        dispatch(deleteEditedPlayId(null));
-        console.log('entered try----');
-        update(ref(db, `plays/${mostBeEdited}`), obj);
-        dispatch(editPlay({ obj, mostBeEdited }));
+        if ('yes') {
+          dispatch(deleteEditedPlayId(null));
+          console.log('entered try----');
+          update(ref(db, `plays/${mostBeEdited}`), obj);
+          dispatch(editPlay({ obj, mostBeEdited }));
+        }
       } catch (error) {
         console.log('error in catch', error);
       }
@@ -225,12 +231,13 @@ export default function PlayForm() {
 
 // 1) add ev edit jamanak buttonnery petq e erevan hamapatasxanabar  // plus
 // 2) close icon-y poxel jnjelu                                     // plus
-// 3) hastatelu hamar modal baci
+// 3) hastatelu hamar modal baci                                   // plus
 // 4)  / -i  backgroundy repeat                                     // plus
-// 5) seats i mej karoxana dzerov grel
+// 5) seats i mej karoxana dzerov grel                              // plusot
 // 6) playname aprove aneluc trnuma
 //7) admin booked nael
-// 8) firefox -i vra input type time dzel ev width-y
-// 9) fixel booked qanaky minus chgna
+// 8) firefox -i vra input type time dzel ev width-y     ///         xndira fixel em iranc motica voncvor
+// 9) fixel booked qanaky minus chgna                              // plus
 // 10) fixel tarber userneri book ery i pahy
-// 11) registratia jamanak link dnel vor gna login
+// 11) registratia jamanak link dnel vor gna login                 // plus
+// 12) user nor mtneluc hinna pahum piti refresh anes vor dzvi

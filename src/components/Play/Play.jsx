@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Play.module.scss';
 import edit from '../../asets/images/eee.svg';
 import del from '../../asets/images/dd.svg';
@@ -13,11 +13,13 @@ import { getDatabase, ref, set, push } from 'firebase/database';
 import { fetchUpdateSeat } from '../../features/PlaysSlice';
 import { fetchBookings } from '../../features/BookingsSlice';
 import { dateToUTC } from '../../helpers/formaterDate';
+import uuid from 'react-uuid';
 
 export default function Play({ id, title, image, date, time, seats }) {
   const dispatch = useDispatch();
   const { isUser } = useSelector((state) => state.users);
   const { users } = useSelector((state) => state.users);
+
   const { bookingsUser } = useSelector((state) => state.bookings);
   const [bookCount, setBookCount] = useState();
   const [message, setMessage] = useState('');
@@ -28,26 +30,34 @@ export default function Play({ id, title, image, date, time, seats }) {
     dispatch(editMessage('Edit play'));
   };
 
-  // console.log(users[0]?.id, '-----------------------');
   const updateSeat = () => {
-    const obj = {
-      id: id,
-      title: title,
-      date: date,
-      time: time,
-      image: image,
-      seats: seats - bookCount,
-    };
-    const bookedObject = {
-      playId: id,
-      playName: title,
-      playDate: date,
-      status: 'pending',
-      ticketsCount: bookCount,
-      bookedDate: dateToUTC(new Date()),
-      userId: users[0]?.id,
-      ...users[0],
-    };
+    let obj;
+    let bookedObject;
+    if (bookCount < seats) {
+      obj = {
+        id: id,
+
+        title: title,
+        date: date,
+        time: time,
+        image: image,
+        seats: seats - bookCount,
+      };
+      bookedObject = {
+        key: uuid(),
+        playId: id,
+        playName: title,
+        playDate: date,
+        status: 'pending',
+        ticketsCount: bookCount,
+        bookedDate: dateToUTC(new Date()),
+        userId: users[0]?.id,
+        ...users[0],
+      };
+    } else {
+      alert('Write correct seats count');
+    }
+
     try {
       const db = getDatabase();
       const postListRef = ref(db, 'bookings/' + users[0]?.id);

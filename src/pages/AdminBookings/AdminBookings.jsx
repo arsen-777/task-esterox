@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
 import styles from './AdminBookings.module.scss';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchBookings } from '../../features/BookingsSlice';
+import { fetchAllBookings } from '../../features/BookingsSlice';
 import Booking from '../../components/Booking/Booking';
 import { Link } from 'react-router-dom';
+import useAuth from '../../components/hooks/useAuth';
 export default function AdminBookings() {
   const dispatch = useDispatch();
-
+  const user = useAuth();
   const { bookingsAdmin } = useSelector((state) => state.bookings);
   useEffect(() => {
-    dispatch(fetchBookings());
-  }, [dispatch]);
+    dispatch(fetchAllBookings(user?.uid));
+  }, [dispatch, user?.uid]);
   return (
     <>
       <div className={styles.container}>
@@ -49,8 +50,7 @@ export default function AdminBookings() {
         </div>
         {bookingsAdmin?.length &&
           bookingsAdmin.map((book) => {
-            console.log(book, '----------------------------');
-            return <Booking key={book.bookingId} {...book} />;
+            return <Booking key={book.key} {...book} />;
           })}
       </div>
     </>

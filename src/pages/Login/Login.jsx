@@ -53,9 +53,9 @@ export default function Login() {
             {/* <Link to="/userplay">
              
             </Link> */}
-            <Link to="/signUp">
+            {/* <Link to="/signUp">
               <button>Sign Up</button>
-            </Link>
+            </Link> */}
           </div>
         </form>
       </div>
