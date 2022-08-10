@@ -6,14 +6,16 @@ import { fetchAllPlays } from '../../features/PlaysSlice';
 import AddPlay from '../../components/AddPlay/AddPlay';
 import { toggleIsUser } from '../../features/usersSlice';
 import { Link } from 'react-router-dom';
+import Loader from '../../components/Loader/Loader';
 export default function AdminPlays() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchAllPlays());
+    dispatch(toggleIsUser(false));
     // dispatch(toggleIsUser());
   }, [dispatch]);
 
-  const { allPlays } = useSelector((state) => state.plays);
+  const { allPlays, isLoading } = useSelector((state) => state.plays);
   return (
     <div>
       <div className={styles.adminContainer}>
@@ -38,8 +40,14 @@ export default function AdminPlays() {
             allPlays.map((play) => {
               return <Play key={play.id} {...play} />;
             })}
-
-          <AddPlay />
+          {isLoading && (
+            <div className={styles.loader}>
+              <div>
+                <Loader />
+              </div>
+            </div>
+          )}
+          {!isLoading && <AddPlay />}
         </div>
       </div>
     </div>

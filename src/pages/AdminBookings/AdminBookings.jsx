@@ -5,10 +5,11 @@ import { fetchAllBookings } from '../../features/BookingsSlice';
 import Booking from '../../components/Booking/Booking';
 import { Link } from 'react-router-dom';
 import useAuth from '../../components/hooks/useAuth';
+import Loader from '../../components/Loader/Loader';
 export default function AdminBookings() {
   const dispatch = useDispatch();
   const user = useAuth();
-  const { bookingsAdmin } = useSelector((state) => state.bookings);
+  const { bookingsAdmin, isLoading } = useSelector((state) => state.bookings);
   useEffect(() => {
     dispatch(fetchAllBookings(user?.uid));
   }, [dispatch, user?.uid]);
@@ -48,10 +49,17 @@ export default function AdminBookings() {
             <h3>Status</h3>
           </div>
         </div>
-        {bookingsAdmin?.length &&
+        {bookingsAdmin &&
           bookingsAdmin.map((book) => {
             return <Booking key={book.key} {...book} />;
           })}
+        {isLoading && (
+          <div className={styles.loader}>
+            <div className={styles.loader}>
+              <Loader />
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

@@ -29,7 +29,7 @@ const usersSlice = createSlice({
       state.cards.push(action.payload);
     },
     toggleIsUser(state, action) {
-      state.isUser = !state.isUser;
+      state.isUser = action.payload;
     },
   },
   extraReducers: {

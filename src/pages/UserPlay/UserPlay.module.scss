@@ -51,3 +51,10 @@
   height: 100vh;
   padding-top: 100px;
 }
+.loader {
+  background-color: transparent;
+
+  & img {
+    background-color: transparent;
+  }
+}

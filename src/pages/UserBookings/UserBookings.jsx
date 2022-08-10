@@ -4,12 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchBookings } from '../../features/BookingsSlice';
 import UserBooking from '../../components/UserBooking/UserBooking';
 import { Link } from 'react-router-dom';
+import spinner from '../../asets/images/loader.svg';
+import Loader from '../../components/Loader/Loader';
 export default function UserBookings() {
   const { users } = useSelector((state) => state.users);
   // const { id } = users[0];
   const email = users[0]?.email;
-  const { bookingsUser } = useSelector((state) => state.bookings);
-
+  const { bookingsUser, isLoading } = useSelector((state) => state.bookings);
+  console.log(isLoading, '-------------');
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchBookings({ id: users[0]?.id }));
@@ -49,8 +51,15 @@ export default function UserBookings() {
       </div>
       {bookingsUser &&
         bookingsUser.map((book) => {
-          return <UserBooking key={book.bookingId} {...book} />;
+          return <UserBooking key={book.playId} {...book} />;
         })}
+      {isLoading && (
+        <div className={styles.loader}>
+          <div>
+            <Loader />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

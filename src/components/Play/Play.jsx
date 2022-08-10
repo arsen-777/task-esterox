@@ -14,14 +14,13 @@ import { fetchUpdateSeat } from '../../features/PlaysSlice';
 import { fetchBookings } from '../../features/BookingsSlice';
 import { dateToUTC } from '../../helpers/formaterDate';
 import uuid from 'react-uuid';
-
 export default function Play({ id, title, image, date, time, seats }) {
+  // console.log(id, '-------id---------');
   const dispatch = useDispatch();
   const { isUser } = useSelector((state) => state.users);
   const { users } = useSelector((state) => state.users);
-
   const { bookingsUser } = useSelector((state) => state.bookings);
-  const [bookCount, setBookCount] = useState();
+  const [bookCount, setBookCount] = useState(0);
   const [message, setMessage] = useState('');
   let isBooked = bookingsUser.find((item) => item.playId === id);
   const handleModal = () => {

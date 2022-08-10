@@ -4,15 +4,14 @@ import { createBookings } from '../helpers/createBookings';
 
 export const fetchBookings = createAsyncThunk(
   'bookings/fetchBookings',
-  async function ({ id }) {
-    // dispatch(toggleIsLoading(true));
+  async function ({ id }, { dispatch }) {
+    dispatch(toggleIsLoading(true));
     const dbRef = ref(getDatabase());
-    console.log(id, '---------------------------');
 
     const snapshot = await get(child(dbRef, `/bookings/${id}`));
     const arr = await snapshot.val();
-
-    return arr;
+    const obj = await createBookings(arr);
+    return obj;
 
     // dispatch(toggleIsLoading(false));
   }
@@ -43,13 +42,14 @@ const bookingsSlice = createSlice({
   initialState: {
     bookingsUser: [],
     bookingsAdmin: [],
+    isLoading: false,
   },
   reducers: {
     editStatus(state, action) {
       const { bookingId, ...book } = action.payload;
       const updatedBookStatus = state.bookingsAdmin.map((item) => {
         if (item.bookingId === bookingId) {
-          return (item = book);
+          return book;
         } else {
           return item;
         }
@@ -57,15 +57,21 @@ const bookingsSlice = createSlice({
       state.bookingsAdmin = updatedBookStatus;
     },
     toggleIsLoading(state, action) {
-      console.log(action.payload);
       state.isLoading = action.payload;
     },
   },
   extraReducers: {
     [fetchBookings.fulfilled]: (state, action) => {
       const objBooks = action.payload;
-      const arr = createBookings(objBooks);
-      state.bookingsUser = arr;
+
+      state.bookingsUser = objBooks;
+      state.isLoading = false;
+    },
+    [fetchBookings.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [fetchBookings.rejected]: (state) => {
+      state.isLoading = false;
     },
     [fetchAllBookings.fulfilled]: (state, action) => {
       let objBooks = action.payload;
@@ -105,6 +111,13 @@ const bookingsSlice = createSlice({
       });
 
       state.bookingsAdmin = newArrayAdmin;
+      state.isLoading = false;
+    },
+    [fetchAllBookings.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [fetchAllBookings.rejected]: (state) => {
+      state.isLoading = false;
     },
   },
 });

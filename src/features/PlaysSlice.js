@@ -62,6 +62,7 @@ const playsSlice = createSlice({
     addMessage: '',
     editMessage: '',
     isLoading: false,
+    isCropped: false,
   },
   reducers: {
     addPost(state, action) {
@@ -90,6 +91,9 @@ const playsSlice = createSlice({
     editMessage(state, action) {
       state.editMessage = action.payload;
     },
+    toggleIsCropped(state, action) {
+      state.isCropped = action.payload;
+    },
     editPlay(state, action) {
       const { mostBeEdited, obj } = action.payload;
 
@@ -103,8 +107,6 @@ const playsSlice = createSlice({
       state.allPlays = changedPlays;
     },
     deletePlay(state, action) {
-      console.log(action.payload.id, 'delete action');
-      console.log(state.allPlays, 'allllllll');
       state.allPlays = state.allPlays.filter(
         (play) => play.id !== action.payload.id
       );
@@ -121,8 +123,14 @@ const playsSlice = createSlice({
         newPlays.push({ id, ...obj[id] });
       }
       state.allPlays = newPlays;
+      state.isLoading = false;
     },
-    [fetchUpdateSeat.fulfilled]: (state, action) => {},
+    [fetchAllPlays.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [fetchAllPlays.rejected]: (state) => {
+      state.isLoading = false;
+    },
   },
 });
 
@@ -137,6 +145,7 @@ export const {
   addMessage,
   editMessage,
   toggleIsLoading,
+  toggleIsCropped,
 } = playsSlice.actions;
 
 export default playsSlice.reducer;

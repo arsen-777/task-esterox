@@ -1,6 +1,5 @@
 export const createBookings = (objBooks) => {
   let newObj = {};
-  console.log(objBooks, '---- objBooks -----');
   let newArrayBooks = [];
   for (let key in objBooks) {
     if (objBooks[key].userId in newObj) {

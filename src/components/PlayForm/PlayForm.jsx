@@ -1,4 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
+import TimePicker from 'react-time-picker-input';
+
 import { getDatabase, ref, update, set, push } from 'firebase/database';
 import { fetchPlays } from '../../features/PlaysSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,6 +8,7 @@ import {
   toggleIsOpen,
   editPlay,
   deleteEditedPlayId,
+  toggleIsCropped,
 } from '../../features/PlaysSlice';
 import styles from './PlayForm.module.scss';
 import uuid from 'react-uuid';
@@ -19,109 +22,90 @@ export default function PlayForm() {
   const modalRef = useRef(null);
   const handlePick = () => {
     filePicker.current.click();
+    dispatch(toggleIsCropped(true));
   };
-  // const handleDatePicker = () => {
-  //   console.log(datePicker.current.click());
-  //   datePicker.current.click();
-  // };
-  const cropperRef = useRef(null);
-  const onCrop = () => {
-    const imageElement = cropperRef?.current;
-    const cropper = imageElement?.cropper;
-    // console.log(cropper.getCroppedCanvas().toDataURL(), 'croppppppppperrrrrr');
-  };
-  const { mostBeEdited, allPlays, addMessage, editMessage } = useSelector(
-    (state) => state.plays
-  );
+
+  const { mostBeEdited, allPlays, addMessage, editMessage, isCropped } =
+    useSelector((state) => state.plays);
   const editedCard = allPlays.find((play) => play.id === mostBeEdited);
   const [title, setTitle] = useState(editedCard?.title || '');
   const [date, setDate] = useState(editedCard?.date || '');
-  const [time, setTime] = useState(editedCard?.time || '');
-  const [fileName, setFileName] = useState(editedCard?.image);
+  const [time, setTime] = useState(editedCard?.time || '0');
+  const [croppedImage, setCroppedImage] = useState(editedCard?.image || null);
+  const [fileName, setFileName] = useState(null);
   const [seats, setSeats] = useState(editedCard?.seats || '');
-  const [isCrop, setIsCrop] = useState(false);
   const { isOutsideClick } = useSelector((state) => state.plays);
-
-  // const [photoUrl, setPhotoUrl] = useState('');
-  // console.log(photoUrl, 'photoUrl');
+  const cropperRef = useRef(null);
   const db = getDatabase();
   const dispatch = useDispatch();
   const closeModal = () => {
     dispatch(deleteEditedPlayId(null));
     dispatch(toggleIsOpen());
+    dispatch(toggleIsCropped(false));
   };
+
+  const onCrop = () => {
+    const imageElement = cropperRef?.current;
+    const cropper = imageElement?.cropper;
+    setCroppedImage(cropper.getCroppedCanvas().toDataURL());
+    setFileName(null);
+  };
+
   function handleOptionChange(e) {
     setSeats(e.target.value);
   }
   function handleTime(e) {
     setTime(e.target.value);
   }
-
-  useEffect(() => {
-    dispatch(toggleIsOpen());
-  }, [dispatch]);
+  console.log(fileName, 'filename ------');
 
   const submitHandler = (e) => {
+    dispatch(toggleIsCropped(false));
     e.preventDefault();
-    // change file type to blob
-    let file;
-    let reader = new FileReader();
-    reader.readAsDataURL(fileName);
-    reader.onload = function async() {
-      file = reader.result;
-      let obj = {
-        key: uuid(),
-        title: title,
-        date: date,
-        time: time,
-        image: file,
-        seats: seats,
-      };
-      try {
-        const db = getDatabase();
-        const postListRef = ref(db, 'plays');
-        const newPostRef = push(postListRef);
-        set(newPostRef, obj);
-        dispatch(fetchPlays({ id: newPostRef.key, ...obj }));
-      } catch (error) {
-        console.log('error in catch');
-      }
-      closeModal();
+    let obj = {
+      key: uuid(),
+      title: title,
+      date: date,
+      time: time,
+      image: croppedImage,
+      seats: seats,
     };
+    try {
+      const db = getDatabase();
+      const postListRef = ref(db, 'plays');
+      const newPostRef = push(postListRef);
+      set(newPostRef, obj);
+      dispatch(fetchPlays({ id: newPostRef.key, ...obj }));
+    } catch (error) {
+      console.log('error in catch');
+    }
+    closeModal();
   };
-  const updateOnePlays = (e) => {
+  const updateOnePlays = async (e) => {
     let str = prompt('Are you sure to update play? yes/no');
-    console.log(str);
     e.preventDefault();
     // change file type to blob
 
-    let file;
-    let reader = new FileReader();
-
-    reader.readAsDataURL(fileName);
-    reader.onload = function async() {
-      file = reader.result;
-      let obj = {
-        title: title,
-        date: date,
-        time: time,
-        image: file,
-        seats: seats,
-        uid: mostBeEdited,
-      };
-
-      try {
-        if ('yes') {
-          dispatch(deleteEditedPlayId(null));
-          console.log('entered try----');
-          update(ref(db, `plays/${mostBeEdited}`), obj);
-          dispatch(editPlay({ obj, mostBeEdited }));
-        }
-      } catch (error) {
-        console.log('error in catch', error);
-      }
-      closeModal();
+    let obj = {
+      title: title,
+      date: date,
+      time: time,
+      image: croppedImage,
+      seats: seats,
+      uid: mostBeEdited,
     };
+
+    try {
+      if ('yes') {
+        dispatch(deleteEditedPlayId(null));
+        console.log('entered try----');
+        update(ref(db, `plays/${mostBeEdited}`), obj);
+        dispatch(editPlay({ obj, mostBeEdited }));
+      }
+    } catch (error) {
+      console.log('error in catch', error);
+    }
+    closeModal();
   };
   useClickOutside(modalRef, () => dispatch(toggleIsOpen()), isOutsideClick);
   return (
@@ -152,13 +136,8 @@ export default function PlayForm() {
                     id="date-time"
                   />
                 </div>
-                <div className={styles.labelTime}>
-                  <input
-                    onChange={(e) => handleTime(e)}
-                    type="time"
-                    name="time"
-                    value={time}
-                  />
+                <div>
+                  <TimePicker onChange={(e) => setTime(e)} value={time} />
                 </div>
               </div>
             </div>
@@ -179,10 +158,13 @@ export default function PlayForm() {
                     ref={filePicker}
                     className={styles.hidden}
                     onChange={(e) => {
-                      setFileName(e.target.files[0]);
+                      // setFileName(e.target.files[0]);
+                      const fileReader = new FileReader();
+                      fileReader.addEventListener('load', (e) => {
+                        setFileName(e.target.result);
+                      });
 
-                      // setPhotoUrl(URL.createObjectURL(e.target.files[0]));
-                      // setIsCrop(!isCrop);
+                      fileReader.readAsDataURL(e.target.files[0]);
                     }}
                     type="file"
                     name="file"
@@ -197,21 +179,28 @@ export default function PlayForm() {
                 </div>
               </div>
 
-              {/* {isCrop && (
-                <Cropper
-                  src={photoUrl}
-                  style={{ height: 200, width: '100%' }}
-                  initialAspectRatio={16 / 9}
-                  guides={false}
-                  crop={onCrop}
-                  ref={cropperRef}
-                />
-              )} */}
               <div className={styles.img}>
-                <img src={fileName} alt="" />
+                <img src={fileName || croppedImage} alt="" />
               </div>
             </div>
           </div>
+          {fileName && (
+            <>
+              {fileName && isCropped && (
+                <Cropper
+                  src={fileName}
+                  style={{ height: 200, width: '100%' }}
+                  initialAspectRatio={16 / 9}
+                  guides={false}
+                  modal
+                  ref={cropperRef}
+                />
+              )}
+              <button type="button" onClick={onCrop}>
+                click
+              </button>
+            </>
+          )}
           <div className={styles.buttonsBlock}>
             <button onClick={closeModal}>Cancel</button>
             {!mostBeEdited && <button type="submit">Save</button>}
@@ -234,10 +223,10 @@ export default function PlayForm() {
 // 3) hastatelu hamar modal baci                                   // plus
 // 4)  / -i  backgroundy repeat                                     // plus
 // 5) seats i mej karoxana dzerov grel                              // plusot
-// 6) playname aprove aneluc trnuma
-//7) admin booked nael
+// 6) playname aprove aneluc trnuma                                   plus
+//7) admin booked nael`````                                           // plus
 // 8) firefox -i vra input type time dzel ev width-y     ///         xndira fixel em iranc motica voncvor
 // 9) fixel booked qanaky minus chgna                              // plus
-// 10) fixel tarber userneri book ery i pahy
+// 10) fixel tarber userneri book ery i pahy                        // plus
 // 11) registratia jamanak link dnel vor gna login                 // plus
 // 12) user nor mtneluc hinna pahum piti refresh anes vor dzvi
