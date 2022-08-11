@@ -1,6 +1,5 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import TimePicker from 'react-time-picker-input';
-
 import { getDatabase, ref, update, set, push } from 'firebase/database';
 import { fetchPlays } from '../../features/PlaysSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,16 +17,12 @@ import upload from '../../asets/images/upload.svg';
 import useClickOutside from '../hooks/useClickOutside';
 
 export default function PlayForm() {
-  const filePicker = useRef(null);
-  const modalRef = useRef(null);
-  const handlePick = () => {
-    filePicker.current.click();
-    dispatch(toggleIsCropped(true));
-  };
-
   const { mostBeEdited, allPlays, addMessage, editMessage, isCropped } =
     useSelector((state) => state.plays);
   const editedCard = allPlays.find((play) => play.id === mostBeEdited);
+  const dispatch = useDispatch();
+  const db = getDatabase();
+
   const [title, setTitle] = useState(editedCard?.title || '');
   const [date, setDate] = useState(editedCard?.date || '');
   const [time, setTime] = useState(editedCard?.time || '0');
@@ -36,8 +31,14 @@ export default function PlayForm() {
   const [seats, setSeats] = useState(editedCard?.seats || '');
   const { isOutsideClick } = useSelector((state) => state.plays);
   const cropperRef = useRef(null);
-  const db = getDatabase();
-  const dispatch = useDispatch();
+  const filePicker = useRef(null);
+  const modalRef = useRef(null);
+
+  const handlePick = () => {
+    filePicker.current.click();
+    dispatch(toggleIsCropped(true));
+  };
+
   const closeModal = () => {
     dispatch(deleteEditedPlayId(null));
     dispatch(toggleIsOpen());
@@ -54,10 +55,6 @@ export default function PlayForm() {
   function handleOptionChange(e) {
     setSeats(e.target.value);
   }
-  function handleTime(e) {
-    setTime(e.target.value);
-  }
-  console.log(fileName, 'filename ------');
 
   const submitHandler = (e) => {
     dispatch(toggleIsCropped(false));
@@ -81,10 +78,10 @@ export default function PlayForm() {
     }
     closeModal();
   };
+
   const updateOnePlays = async (e) => {
     let str = prompt('Are you sure to update play? yes/no');
     e.preventDefault();
-    // change file type to blob
 
     let obj = {
       title: title,
@@ -96,7 +93,7 @@ export default function PlayForm() {
     };
 
     try {
-      if ('yes') {
+      if (str === 'yes') {
         dispatch(deleteEditedPlayId(null));
         console.log('entered try----');
         update(ref(db, `plays/${mostBeEdited}`), obj);
@@ -158,7 +155,6 @@ export default function PlayForm() {
                     ref={filePicker}
                     className={styles.hidden}
                     onChange={(e) => {
-                      // setFileName(e.target.files[0]);
                       const fileReader = new FileReader();
                       fileReader.addEventListener('load', (e) => {
                         setFileName(e.target.result);
@@ -196,8 +192,8 @@ export default function PlayForm() {
                   ref={cropperRef}
                 />
               )}
-              <button type="button" onClick={onCrop}>
-                click
+              <button className={styles.cropBtn} type="button" onClick={onCrop}>
+                Save changed image
               </button>
             </>
           )}

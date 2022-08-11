@@ -1,18 +1,19 @@
 import React, { useEffect } from 'react';
 import styles from './AdminPlays.module.scss';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Play from '../../components/Play/Play';
-import { fetchAllPlays } from '../../features/PlaysSlice';
 import AddPlay from '../../components/AddPlay/AddPlay';
-import { toggleIsUser } from '../../features/usersSlice';
-import { Link } from 'react-router-dom';
 import Loader from '../../components/Loader/Loader';
+import { toggleIsUser } from '../../features/usersSlice';
+import { fetchAllPlays } from '../../features/PlaysSlice';
+
 export default function AdminPlays() {
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchAllPlays());
     dispatch(toggleIsUser(false));
-    // dispatch(toggleIsUser());
   }, [dispatch]);
 
   const { allPlays, isLoading } = useSelector((state) => state.plays);

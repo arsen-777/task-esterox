@@ -12,8 +12,6 @@ export const fetchBookings = createAsyncThunk(
     const arr = await snapshot.val();
     const obj = await createBookings(arr);
     return obj;
-
-    // dispatch(toggleIsLoading(false));
   }
 );
 
@@ -125,5 +123,3 @@ const bookingsSlice = createSlice({
 export const { editStatus, toggleIsLoading } = bookingsSlice.actions;
 
 export default bookingsSlice.reducer;
-
-//////////////////////////

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styles from './Play.module.scss';
 import edit from '../../asets/images/eee.svg';
 import del from '../../asets/images/dd.svg';
@@ -14,8 +14,8 @@ import { fetchUpdateSeat } from '../../features/PlaysSlice';
 import { fetchBookings } from '../../features/BookingsSlice';
 import { dateToUTC } from '../../helpers/formaterDate';
 import uuid from 'react-uuid';
+
 export default function Play({ id, title, image, date, time, seats }) {
-  // console.log(id, '-------id---------');
   const dispatch = useDispatch();
   const { isUser } = useSelector((state) => state.users);
   const { users } = useSelector((state) => state.users);
@@ -23,6 +23,7 @@ export default function Play({ id, title, image, date, time, seats }) {
   const [bookCount, setBookCount] = useState(0);
   const [message, setMessage] = useState('');
   let isBooked = bookingsUser.find((item) => item.playId === id);
+
   const handleModal = () => {
     dispatch(toggleIsOpen());
     dispatch(editMostBeEdited({ id }));
@@ -35,7 +36,6 @@ export default function Play({ id, title, image, date, time, seats }) {
     if (bookCount < seats) {
       obj = {
         id: id,
-
         title: title,
         date: date,
         time: time,

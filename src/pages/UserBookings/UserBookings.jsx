@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react';
-import styles from './UserBookings.module.scss';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchBookings } from '../../features/BookingsSlice';
-import UserBooking from '../../components/UserBooking/UserBooking';
 import { Link } from 'react-router-dom';
-import spinner from '../../asets/images/loader.svg';
+import { fetchBookings } from '../../features/BookingsSlice';
 import Loader from '../../components/Loader/Loader';
+import UserBooking from '../../components/UserBooking/UserBooking';
+import styles from './UserBookings.module.scss';
+import user from '../../asets/images/user.svg';
 export default function UserBookings() {
   const { users } = useSelector((state) => state.users);
-  // const { id } = users[0];
   const email = users[0]?.email;
   const { bookingsUser, isLoading } = useSelector((state) => state.bookings);
-  console.log(isLoading, '-------------');
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchBookings({ id: users[0]?.id }));
   }, [dispatch, users]);
+
   return (
     <div className={styles.container}>
       <div className={styles.navMenu}>
@@ -28,7 +28,12 @@ export default function UserBookings() {
           </Link>
         </div>
         <div>
-          <div>{email}</div>
+          <div className={styles.userBlock}>
+            <div>
+              <img src={user} alt="" />
+            </div>
+            <div>{email}</div>
+          </div>
         </div>
       </div>
       <div className={styles.bookingContainer}>
@@ -63,3 +68,13 @@ export default function UserBookings() {
     </div>
   );
 }
+
+///
+
+// "@date-io/date-fns": "^2.15.0",
+//     "@emotion/react": "^11.10.0",
+//     "@emotion/styled": "^11.10.0",
+//     "@material-ui/core": "5.0.0-alpha.24",
+//     "@material-ui/lab": "5.0.0-alpha.24",
+//     "@mui/lab": "^5.0.0-alpha.94",
+//     "@mui/material": "^5.10.0",

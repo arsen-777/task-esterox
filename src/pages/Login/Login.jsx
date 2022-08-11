@@ -1,18 +1,19 @@
 import React, { useRef } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { fetchAllUsers } from '../../features/usersSlice';
 import { useDispatch } from 'react-redux';
 import styles from './Login.module.scss';
-const auth = getAuth();
+
 export default function Login() {
+  const auth = getAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const mailRef = useRef(null);
   const passRef = useRef(null);
+
   const handlerOnSubmit = async (e) => {
     e.preventDefault();
-
     signInWithEmailAndPassword(
       auth,
       mailRef.current.value,
@@ -20,10 +21,8 @@ export default function Login() {
     )
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log(user, 'user -----------------------');
         if (user) {
           dispatch(fetchAllUsers());
-          // dispatch(toggleIsUser());
           return navigate('/userplay');
         }
       })
@@ -47,15 +46,8 @@ export default function Login() {
               <input ref={passRef} type="password" name="pass" />
             </div>
           </div>
-
           <div className={styles.signUpLogin}>
             <button type="submit">Log In</button>
-            {/* <Link to="/userplay">
-             
-            </Link> */}
-            {/* <Link to="/signUp">
-              <button>Sign Up</button>
-            </Link> */}
           </div>
         </form>
       </div>

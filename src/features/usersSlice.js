@@ -14,7 +14,7 @@ export const fetchAllUsers = createAsyncThunk(
       const user = await snapshot.val();
       return { id: userId, ...user };
     } else {
-      // console.log('No data available');
+      console.log('No data available');
     }
   }
 );

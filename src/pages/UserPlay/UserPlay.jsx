@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import Loader from '../../components/Loader/Loader';
 import Play from '../../components/Play/Play';
 import { fetchAllPlays } from '../../features/PlaysSlice';
 import { fetchBookings } from '../../features/BookingsSlice';
-import styles from './UserPlay.module.scss';
-import { Link } from 'react-router-dom';
 import { toggleIsUser } from '../../features/usersSlice';
-import Loader from '../../components/Loader/Loader';
+import styles from './UserPlay.module.scss';
 
 export default function UserPlay() {
   const dispatch = useDispatch();
@@ -20,8 +20,6 @@ export default function UserPlay() {
     dispatch(toggleIsUser(true));
     dispatch(fetchBookings({ id: users[0]?.id }));
   }, [dispatch, users]);
-
-  // console.log(isLoading, 'isloading');
 
   return (
     <>

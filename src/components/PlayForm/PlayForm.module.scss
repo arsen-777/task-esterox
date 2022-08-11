@@ -6,8 +6,8 @@
   border: 1px solid #888;
   border-radius: 8px;
   left: 40%;
-  width: 500px;
-  height: 500px;
+  width: 600px;
+  height: 600px;
   display: flex;
   justify-content: center;
   flex-flow: column;
@@ -134,7 +134,12 @@
 .img {
   width: 250px;
   height: 100px;
-
-  & img {
-  }
+}
+.cropBtn {
+  padding: 10px 0;
+  background-color: rgb(46, 223, 223);
+  color: rgb(20, 15, 15);
+  font-size: 18px;
+}
+.cropperContainer {
 }

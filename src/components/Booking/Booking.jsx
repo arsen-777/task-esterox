@@ -1,11 +1,7 @@
 import React from 'react';
 import styles from './Booking.module.scss';
 import { useDispatch } from 'react-redux';
-import {
-  fetchUpdateStatus,
-  fetchAllBookings,
-} from '../../features/BookingsSlice';
-import useAuth from '../hooks/useAuth';
+import { fetchUpdateStatus } from '../../features/BookingsSlice';
 import uuid from 'react-uuid';
 
 export default function Booking({
@@ -33,7 +29,6 @@ export default function Booking({
       playName,
       key: uuid(),
     };
-    console.log(updatedBook, 'updateBook');
     try {
       dispatch(fetchUpdateStatus({ obj: updatedBook, id: id }));
     } catch (error) {

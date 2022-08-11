@@ -7,8 +7,10 @@ import {
   addMessage,
   toggleIsCropped,
 } from '../../features/PlaysSlice';
+
 export default function AddPlay() {
   const dispatch = useDispatch();
+
   const toggleModal = () => {
     dispatch(toggleIsOpen());
     dispatch(addMessage('Add New play'));

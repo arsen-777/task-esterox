@@ -3,16 +3,19 @@ import styles from './AdminBookings.module.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchAllBookings } from '../../features/BookingsSlice';
 import Booking from '../../components/Booking/Booking';
+import Loader from '../../components/Loader/Loader';
 import { Link } from 'react-router-dom';
 import useAuth from '../../components/hooks/useAuth';
-import Loader from '../../components/Loader/Loader';
+
 export default function AdminBookings() {
   const dispatch = useDispatch();
   const user = useAuth();
   const { bookingsAdmin, isLoading } = useSelector((state) => state.bookings);
+
   useEffect(() => {
     dispatch(fetchAllBookings(user?.uid));
   }, [dispatch, user?.uid]);
+
   return (
     <>
       <div className={styles.container}>

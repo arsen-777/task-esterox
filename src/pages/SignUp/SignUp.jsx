@@ -22,7 +22,6 @@ export default function SignUp() {
     );
 
     function writeUserData(userId, name, email) {
-      // console.log(userId, name, email, 'registratia');
       const db = getDatabase();
       set(ref(db, 'users/' + userId), {
         username: name,
