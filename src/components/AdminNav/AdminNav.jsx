@@ -22,7 +22,7 @@ export default function AdminNav() {
                 </Link>
             </div>
             <div>
-                <p>Admin/ {currentUser.username}</p>
+                <p>Admin/ {currentUser?.username}</p>
             </div>
         </div>
 

@@ -33,12 +33,16 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home/>}/>
                     <Route path="/signUp"
-                           element={<ProtectedRoutes user={!currentUser} url='/userplay'><SignUp/></ProtectedRoutes>}/>
+                           element={<ProtectedRoutes user={!user} url='/userplay'><SignUp/></ProtectedRoutes>}/>
                     <Route path="/login"
-                           element={<ProtectedRoutes user={!currentUser} url='/userplay'><Login/></ProtectedRoutes>}/>
-                    <Route path="/adminplays" element={<ProtectedRoutes user={currentUser}
-                                                                        url='/userplay'><AdminPlays/>
-                    </ProtectedRoutes>}/>
+                           element={<ProtectedRoutes user={!user} url='/userplay'><Login/></ProtectedRoutes>}/>
+                    <Route path="/adminplays" element={
+                        // <ProtectedRoutes user={currentUser}
+                                                                        // url='/userplay'>
+                            <AdminPlays/>
+                    // </ProtectedRoutes>
+
+                    }/>
                     <Route
                         path="/userplay"
                         element={
@@ -56,7 +60,7 @@ function App() {
                         }
                     />
                     <Route path="/adminbookings"
-                           element={<ProtectedRoutes user={currentUser}
+                           element={<ProtectedRoutes user={user && currentUser?.role === 'admin'}
                                                      url='/userbookings'><AdminBookings/>
                            </ProtectedRoutes>}/>
                 </Routes>

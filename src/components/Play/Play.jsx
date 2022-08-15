@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useLocation } from "react-router";
 import styles from './Play.module.scss';
 import edit from '../../asets/images/eee.svg';
 import del from '../../asets/images/dd.svg';
@@ -17,12 +18,14 @@ import uuid from 'react-uuid';
 
 export default function Play({id, title, image, date, time, seats}) {
     const dispatch = useDispatch();
+    const {pathname} = useLocation();
     const {isUser} = useSelector((state) => state.users);
     const {users} = useSelector((state) => state.users);
     const {bookingsUser} = useSelector((state) => state.bookings);
     const [bookCount, setBookCount] = useState(0);
     const [message, setMessage] = useState('');
     let isBooked = bookingsUser.find((item) => item.playId === id);
+    const {users: [currentUser]} = useSelector((state) => state.users);
 
     const handleModal = () => {
         dispatch(toggleIsOpen());
@@ -119,24 +122,27 @@ export default function Play({id, title, image, date, time, seats}) {
                         </p>
                     )}
                 </div>
-                {!isBooked ? (
-                    <div className={styles.book}>
-                        {isUser && seats && (
-                            <div className={styles.inpBtn}>
-                                <button onClick={updateSeat}>Book</button>
+                {!pathname.includes('admin') && <>
+                    {!isBooked ? (
+                        <div className={styles.book}>
+                            {isUser && seats && (
+                                <div className={styles.inpBtn}>
+                                    <button onClick={updateSeat}>Book</button>
 
-                                <input
-                                    type="number"
-                                    onChange={(e) => handleBook(e)}
-                                    value={bookCount}
-                                />
-                            </div>
-                        )}
-                        <span className={styles.span}>{message}</span>
-                    </div>
-                ) : (
-                    <p className={styles.booked}>Booked</p>
-                )}
+                                    <input
+                                        type="number"
+                                        onChange={(e) => handleBook(e)}
+                                        value={bookCount}
+                                    />
+                                </div>
+                            )}
+                            <span className={styles.span}>{message}</span>
+                        </div>
+                    ) : (
+                        <p className={styles.booked}>Booked</p>
+                    )}
+                </>}
+
             </div>
         </>
     );

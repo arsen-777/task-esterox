@@ -8,7 +8,7 @@ import {fetchBookings} from '../../features/BookingsSlice';
 import {toggleIsUser} from '../../features/usersSlice';
 import styles from './UserPlay.module.scss';
 import {getAuth} from 'firebase/auth';
-
+import {useNavigate} from "react-router-dom";
 export default function UserPlay() {
     const dispatch = useDispatch();
     const {allPlays} = useSelector((state) => state.plays);
@@ -17,6 +17,7 @@ export default function UserPlay() {
     console.log(currentUser)
     const {users} = useSelector((state) => state.users);
     const email = users[0]?.email;
+    const navigate = useNavigate()
     useEffect(() => {
         dispatch(fetchAllPlays());
         dispatch(toggleIsUser(true));
@@ -25,7 +26,7 @@ export default function UserPlay() {
 
     const auth = getAuth()
     const signOut = () => {
-     auth.signOut()
+     auth.signOut().then(res=>navigate('/login'))
 
     }
     return (

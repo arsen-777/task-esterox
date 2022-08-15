@@ -3,7 +3,7 @@ import { Navigate } from 'react-router';
 
 export default function ProtectedRoutes({ children, user,url }) {
   console.log(user,"user ------------------");
-  if (!user && user?.role !== 'admin') {
+  if (!user ) {
     console.log("mtnumaaaaaaa")
     return <Navigate replace to={url} />;
   }
