@@ -4,6 +4,7 @@
   justify-content: space-evenly;
   flex-flow: wrap;
 }
+
 .container {
   height: 45px;
   border-bottom: 4px solid rgb(63, 58, 58);
@@ -21,12 +22,14 @@
     font-style: italic;
   }
 }
+
 .navMenu {
   width: 10%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .nav {
   width: 10%;
   display: flex;
@@ -37,6 +40,8 @@
   text-decoration: none;
   font-size: 18px;
   color: black;
+  transition: .8s;
+
   &:hover {
     color: rgb(19, 122, 156);
   }
@@ -51,10 +56,30 @@
   height: 100vh;
   padding-top: 100px;
 }
+
 .loader {
   background-color: transparent;
 
   & img {
     background-color: transparent;
+  }
+}
+
+.users {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 300px;
+
+  & button {
+    padding: 6px 20px;
+    background-color: lightblue;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    transition: .8s;
+
+    &:hover {
+      color: rgb(19, 122, 156);    }
   }
 }

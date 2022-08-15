@@ -96,7 +96,7 @@ export default function PlayForm() {
       if (str === 'yes') {
         dispatch(deleteEditedPlayId(null));
         console.log('entered try----');
-        update(ref(db, `plays/${mostBeEdited}`), obj);
+        await update(ref(db, `plays/${mostBeEdited}`), obj);
         dispatch(editPlay({ obj, mostBeEdited }));
       }
     } catch (error) {
