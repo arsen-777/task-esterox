@@ -1,56 +1,44 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import styles from './AdminPlays.module.scss';
-import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import {Link} from 'react-router-dom';
+import {useSelector, useDispatch} from 'react-redux';
 import Play from '../../components/Play/Play';
 import AddPlay from '../../components/AddPlay/AddPlay';
 import Loader from '../../components/Loader/Loader';
-import { toggleIsUser } from '../../features/usersSlice';
-import { fetchAllPlays } from '../../features/PlaysSlice';
+import {toggleIsUser} from '../../features/usersSlice';
+import {fetchAllPlays} from '../../features/PlaysSlice';
+import AdminNav from "../../components/AdminNav/AdminNav";
 
 export default function AdminPlays() {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchAllPlays());
-    dispatch(toggleIsUser(false));
-  }, [dispatch]);
+    useEffect(() => {
+        dispatch(fetchAllPlays());
+        dispatch(toggleIsUser(false));
+    }, [dispatch]);
 
-  const { allPlays, isLoading } = useSelector((state) => state.plays);
-  return (
-    <div>
-      <div className={styles.adminContainer}>
-        <div className={styles.adminNav}>
-          <div className={styles.links}>
-            <Link className={styles.link} to="/adminplays">
-              Plays
-            </Link>
-            <Link className={styles.link} to="/adminbookings">
-              Bookings
-            </Link>
-          </div>
-          <div>
-            <p>Admin</p>
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.playsBlock}>
-        <div className={styles.playsContainer}>
-          {allPlays?.length > 0 &&
-            allPlays.map((play) => {
-              return <Play key={play.id} {...play} />;
-            })}
-          {isLoading && (
-            <div className={styles.loader}>
-              <div>
-                <Loader />
-              </div>
+    const {allPlays, isLoading} = useSelector((state) => state.plays);
+    return (
+        <div>
+            <div className={styles.adminContainer}>
+                <AdminNav/>
             </div>
-          )}
-          {!isLoading && <AddPlay />}
+            <div className={styles.playsBlock}>
+                <div className={styles.playsContainer}>
+                    {allPlays?.length > 0 &&
+                        allPlays.map((play) => {
+                            return <Play key={play.id} {...play} />;
+                        })}
+                    {isLoading && (
+                        <div className={styles.loader}>
+                            <div>
+                                <Loader/>
+                            </div>
+                        </div>
+                    )}
+                    {!isLoading && <AddPlay/>}
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 }

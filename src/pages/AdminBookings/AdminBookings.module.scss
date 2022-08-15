@@ -12,6 +12,15 @@
   width: 12%;
   margin-top: 55px;
 }
+
+.adminContainer {
+  height: 55px;
+  position: fixed;
+  background-color: lightblue;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .container {
   height: 45px;
   border-bottom: 4px solid rgb(63, 58, 58);
@@ -30,7 +39,7 @@
   }
 }
 .navMenu {
-  width: 10%;
+  width: 20%;
   display: flex;
   align-items: center;
   justify-content: space-between;

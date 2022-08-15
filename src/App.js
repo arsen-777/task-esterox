@@ -17,6 +17,8 @@ import ProtectedRoutes from './ProtectedRoutes';
 function App() {
     const dispatch = useDispatch();
     const {isOpen} = useSelector((state) => state.plays);
+    const {users: [currentUser]} = useSelector((state) => state.users);
+    console.log(currentUser)
     const user = useAuth();
 
     useEffect(() => {
@@ -31,10 +33,12 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home/>}/>
                     <Route path="/signUp"
-                           element={<ProtectedRoutes user={!user} url='/userplay'><SignUp/></ProtectedRoutes>}/>
+                           element={<ProtectedRoutes user={!currentUser} url='/userplay'><SignUp/></ProtectedRoutes>}/>
                     <Route path="/login"
-                           element={<ProtectedRoutes user={!user} url='/userplay'><Login/></ProtectedRoutes>}/>
-                    <Route path="/adminplays" element={<AdminPlays/>}/>
+                           element={<ProtectedRoutes user={!currentUser} url='/userplay'><Login/></ProtectedRoutes>}/>
+                    <Route path="/adminplays" element={<ProtectedRoutes user={currentUser}
+                                                                        url='/userplay'><AdminPlays/>
+                    </ProtectedRoutes>}/>
                     <Route
                         path="/userplay"
                         element={
@@ -46,12 +50,15 @@ function App() {
                     <Route
                         path="/userbookings"
                         element={
-                            <ProtectedRoutes user={user} url='/login'>
+                            <ProtectedRoutes user={currentUser} url='/login'>
                                 <UserBookings/>
                             </ProtectedRoutes>
                         }
                     />
-                    <Route path="/adminbookings" element={<AdminBookings/>}/>
+                    <Route path="/adminbookings"
+                           element={<ProtectedRoutes user={currentUser}
+                                                     url='/userbookings'><AdminBookings/>
+                           </ProtectedRoutes>}/>
                 </Routes>
             </BrowserRouter>
             {isOpen && <PlayForm/>}

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { fetchAllUsers } from '../../features/usersSlice';
 import { useDispatch } from 'react-redux';
 import styles from './Login.module.scss';
@@ -48,7 +48,9 @@ export default function Login() {
           </div>
           <div className={styles.signUpLogin}>
             <button type="submit">Log In</button>
+
           </div>
+          <Link className={styles.link} to={'/signUp'}>Sign Up</Link>
         </form>
       </div>
     </div>

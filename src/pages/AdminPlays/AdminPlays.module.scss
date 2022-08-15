@@ -20,26 +20,3 @@
   align-items: center;
   justify-content: space-between;
 }
-.adminNav {
-  padding: 0 25px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 97vw;
-  & p {
-    font-size: 22px;
-    font-style: italic;
-  }
-}
-.links {
-  display: flex;
-  justify-content: space-between;
-  width: 12%;
-}
-
-.link {
-  text-decoration: none;
-  font-size: 20px;
-  color: black;
-}

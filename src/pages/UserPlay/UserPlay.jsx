@@ -13,7 +13,8 @@ export default function UserPlay() {
     const dispatch = useDispatch();
     const {allPlays} = useSelector((state) => state.plays);
     const {isLoading} = useSelector((state) => state.plays);
-
+    const {users: [currentUser]} = useSelector((state) => state.users);
+    console.log(currentUser)
     const {users} = useSelector((state) => state.users);
     const email = users[0]?.email;
     useEffect(() => {
@@ -37,6 +38,11 @@ export default function UserPlay() {
                     <Link to={'/userbookings'} className={styles.link}>
                         Bookings
                     </Link>
+                    {currentUser?.role === 'admin' && (
+                        <Link to={'/adminplays'} className={styles.link}>
+                            Admin menu
+                        </Link>
+                    )}
                 </div>
                 <div className={styles.users}>
                     <div><p>

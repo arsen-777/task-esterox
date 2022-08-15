@@ -6,6 +6,7 @@ import Booking from '../../components/Booking/Booking';
 import Loader from '../../components/Loader/Loader';
 import { Link } from 'react-router-dom';
 import useAuth from '../../components/hooks/useAuth';
+import AdminNav from "../../components/AdminNav/AdminNav";
 
 export default function AdminBookings() {
   const dispatch = useDispatch();
@@ -18,19 +19,9 @@ export default function AdminBookings() {
 
   return (
     <>
-      <div className={styles.container}>
-        <div className={styles.navMenu}>
-          <Link to={'/adminplays'} className={styles.link}>
-            Play
-          </Link>
-          <Link to={'/adminbookings'} className={styles.link}>
-            Bookings
-          </Link>
-        </div>
-        <div>
-          <p>Admin</p>
-        </div>
-      </div>
+    <div className={styles.adminContainer}>
+      <AdminNav/>
+    </div>
       <div>
         <div className={styles.bookingContainer}>
           <div className={styles.size}>

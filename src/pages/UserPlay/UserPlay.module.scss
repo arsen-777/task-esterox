@@ -6,7 +6,6 @@
 }
 
 .container {
-  height: 45px;
   border-bottom: 4px solid rgb(63, 58, 58);
   display: flex;
   justify-content: space-between;
@@ -24,7 +23,7 @@
 }
 
 .navMenu {
-  width: 10%;
+  width: 20%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -82,4 +81,5 @@
     &:hover {
       color: rgb(19, 122, 156);    }
   }
+
 }
