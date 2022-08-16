@@ -36,7 +36,8 @@ export default function Play({id, title, image, date, time, seats}) {
     const updateSeat = () => {
         let obj;
         let bookedObject;
-        if (bookCount <= seats) {
+        console.log(typeof bookCount,typeof seats,'bookCount,seats')
+        if (+bookCount <= +seats) {
             obj = {
                 id: id,
                 title: title,
@@ -53,11 +54,13 @@ export default function Play({id, title, image, date, time, seats}) {
                 status: 'pending',
                 ticketsCount: bookCount,
                 bookedDate: dateToUTC(new Date()),
-                userId: users[0]?.id,
+                userId: currentUser?.id,
                 ...users[0],
             };
+
         } else {
             alert('Write correct seats count');
+            setBookCount(0)
         }
 
         try {
@@ -70,9 +73,10 @@ export default function Play({id, title, image, date, time, seats}) {
         }
         dispatch(fetchUpdateSeat(obj));
         dispatch(fetchBookings(bookedObject));
+        setBookCount(0)
     };
     const handleBook = (e) => {
-        if (+seats && e.target.value > 0 && e.target.value <= seats) {
+        if ((+seats && e.target.value > 0 )|| e.target.value <= seats) {
             setBookCount(e.target.value);
         }
         if (e.target.value < 0 && e.target.value > seats) {

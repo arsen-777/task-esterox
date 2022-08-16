@@ -6,16 +6,16 @@ import Loader from '../../components/Loader/Loader';
 import UserBooking from '../../components/UserBooking/UserBooking';
 import styles from './UserBookings.module.scss';
 import user from '../../asets/images/user.svg';
+import SignOut from "../../components/SignOut/SignOut";
 export default function UserBookings() {
-  const { users } = useSelector((state) => state.users);
-  const email = users[0]?.email;
+  const { users:[currentUser] } = useSelector((state) => state.users);
+  const name = currentUser?.username;
   const { bookingsUser, isLoading } = useSelector((state) => state.bookings);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchBookings({ id: users[0]?.id }));
-  }, [dispatch, users]);
-
+    dispatch(fetchBookings({ id: currentUser?.id }));
+  }, [dispatch, currentUser]);
   return (
     <div className={styles.container}>
       <div className={styles.navMenu}>
@@ -32,7 +32,8 @@ export default function UserBookings() {
             <div>
               <img src={user} alt="" />
             </div>
-            <div>{email}</div>
+            <div>{name}</div>
+            <SignOut/>
           </div>
         </div>
       </div>

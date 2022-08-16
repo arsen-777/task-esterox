@@ -31,11 +31,11 @@ export const fetchUpdateSeat = createAsyncThunk(
   'plays/fetchUpdateSeat',
   async function (obj, { dispatch }) {
     const db = getDatabase();
-
+  
     try {
-      update(ref(db, `plays/${obj.id}`), obj);
+      await update(ref(db, `plays/${obj?.id}`), obj);
 
-      dispatch(editPlay({ obj, mostBeEdited: obj.id }));
+      dispatch(editPlay({ obj, mostBeEdited: obj?.id }));
     } catch (error) {
       console.log('error in catch', error);
     }
@@ -46,7 +46,7 @@ export const fetchDeletePlay = createAsyncThunk(
   'plays/fetchDeletePlay',
   async function (uid, { dispatch }) {
     const db = getDatabase();
-    remove(ref(db, `plays/${uid}`));
+    await remove(ref(db, `plays/${uid}`));
     dispatch(deletePlay({ id: uid }));
   }
 );
@@ -135,16 +135,13 @@ const playsSlice = createSlice({
 });
 
 export const {
-  addPost,
   toggleIsOpen,
   editMostBeEdited,
   editPlay,
   deleteEditedPlayId,
-  toggleIsBooked,
   deletePlay,
   addMessage,
   editMessage,
-  toggleIsLoading,
   toggleIsCropped,
 } = playsSlice.actions;
 

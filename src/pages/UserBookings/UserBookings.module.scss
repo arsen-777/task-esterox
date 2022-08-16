@@ -15,7 +15,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 45px;
+  height: 60px;
   border-bottom: 4px solid rgb(63, 58, 58);
   background-color: rgb(38, 171, 179);
 }
@@ -40,14 +40,15 @@
 .userBlock {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   height: 40px;
-  padding-right: 60px;
-  width: 100%;
+  padding-right: 20px;
+  width: 200px;
   & div {
     display: flex;
-    width: 60px;
+    width: 70px;
     justify-content: center;
+    align-items: center;
     height: 20px;
     & img {
       width: 100%;

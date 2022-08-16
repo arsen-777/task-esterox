@@ -18,7 +18,6 @@ function App() {
     const dispatch = useDispatch();
     const {isOpen} = useSelector((state) => state.plays);
     const {users: [currentUser]} = useSelector((state) => state.users);
-    console.log(currentUser)
     const user = useAuth();
 
     useEffect(() => {
