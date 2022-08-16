@@ -1,7 +1,8 @@
 .signOut {
   width: 80px;
   cursor: pointer;
+  transition: 0.7s;
   &:hover {
-    color: cadetblue;
+    color: #166567;
   }
 }
